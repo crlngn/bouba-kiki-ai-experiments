@@ -10,6 +10,7 @@ Outputs (results/):
   summary_crossmodal.csv  % round-congruent choices per dimension
   summary_classic.csv     % congruent choices per classic correspondence
   summary_graded.csv      logistic weights of P(sharp name) on frequency, amplitude, spikiness, per language
+  position_bias.csv       share of answers picking the first option (0.5 = no bias)
   screening_flags.csv     words a model said it recognises
   figures/main.png        the main chart
 
@@ -151,6 +152,18 @@ def summarise_graded(df):
     return pd.DataFrame(out)
 
 
+def position_bias(df):
+    """Share of two-choice answers that picked the first option, per model and task (0.5 = no bias)."""
+    m = df[df["answer_type"].isin(["letter", "word"]) & df["parsed"].notna()].copy()
+    if "first_option" not in m:
+        m["first_option"] = None
+    m = m[(m["answer_type"] == "letter") | m["first_option"].notna()]
+    if m.empty:
+        return pd.DataFrame()
+    first = m["parsed"] == m["first_option"].where(m["answer_type"] == "word", "A")
+    return m.assign(first=first).groupby(["model", "task"])["first"].agg(["mean", "count"]).reset_index()
+
+
 def screening_flags(df):
     """Words any model claimed to recognise, with what it said."""
     m = df[(df["task"] == "screen") & (df["parsed"] == "KNOWN")]
@@ -194,7 +207,7 @@ def main():
         "summary_match": summarise_match(df), "summary_2x2": summarise_2x2(df),
         "summary_rating": summarise_rating(df), "summary_crossmodal": summarise_crossmodal(df),
         "summary_classic": summarise_classic(df), "summary_graded": summarise_graded(df),
-        "screening_flags": screening_flags(df),
+        "position_bias": position_bias(df), "screening_flags": screening_flags(df),
     }
     for name, t in tables.items():
         if not t.empty:

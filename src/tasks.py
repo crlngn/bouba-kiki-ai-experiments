@@ -204,7 +204,7 @@ def graded_trials(words, shapes, n_pairs=4, langs=("en", "zh"), seed=0):
                         "task": "graded", "shape_id": s["shape_id"], "frequency": s["frequency"],
                         "amplitude": s["amplitude"], "spikiness": s["spikiness"], "word_pair": i,
                         "rendering": "spelled", "shape_mode": "image", "order": order, "lang": lang,
-                        "options": {r["word"]: "round", k["word"]: "sharp"}, "answer_type": "word",
+                        "options": {r["word"]: "round", k["word"]: "sharp"}, "answer_type": "word", "first_option": a,
                         "images": [s["file"]], "word": f"{r['word']}/{k['word']}", "word_set": "fresh",
                         "word_class": "", "cell": "pure",
                         "prompt": GRADED_PROMPT[lang].format(a=a, b=b),
