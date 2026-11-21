@@ -1,4 +1,4 @@
-# Do AI models share human shape–sound correspondences?
+# Do AI models share human shape-sound correspondences?
 
 Most people match a round-sounding made-up word like *maluma* to a round blob and a sharp-sounding one like *takete* to a spiky star: the bouba/kiki effect. This repo tests whether language and vision-language models make the same matches, and whether they still do once spelling cues and memorized examples are removed.
 
