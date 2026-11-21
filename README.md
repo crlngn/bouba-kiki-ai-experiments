@@ -2,7 +2,7 @@
 
 Most people match a round-sounding made-up word like *maluma* to a round blob and a sharp-sounding one like *takete* to a spiky star: the bouba/kiki effect. This repo tests whether language and vision-language models make the same matches, and whether they still do once spelling cues and memorized examples are removed.
 
-The framing comes from **ideaesthesia** (Jürgens & Nikolić, 2012), which my MIT Media Lab thesis *[PerForm](https://hdl.handle.net/1721.1/124080)* built on: the senses connect through shared high-level concepts, not directly to each other. A sharp sound and a jagged shape feel related because both reach the idea of *sharpness*. If a model links them through a shared concept, the same internal "sharpness" representation should respond to *takete*, to a spiky star and to the word *knife*. Phase 1 (this code) tests the behavior. Phase 2 will look for that shared representation inside open-weights models.
+The framing grows from my MIT Media Lab thesis *[PerForm](https://hdl.handle.net/1721.1/124080)* and the idea that on people's unconscious and conscious perception, the senses connect through shared high-level concepts, not directly mapped to each other. A sharp sound and a jagged shape feel related because both reach the idea of *sharpness*. If a model links them through a shared concept, the same internal "sharpness" representation should respond to *takete*, to a spiky star and to the word *knife*. Phase 1 (this code) tests the behavior. Phase 2 will look for that shared representation inside open-weights models.
 
 > **Status:** phase 1 pipeline built and tested with a mock model. No real model results yet.
 
