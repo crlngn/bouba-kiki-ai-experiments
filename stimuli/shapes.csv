@@ -1,126 +1,216 @@
-shape_id,file,frequency,amplitude,spikiness,role
-rf_f03_a05_k01,stimuli/shapes/rf_f03_a05_k01.png,3,0.05,1,grid
-rf_f03_a05_k02,stimuli/shapes/rf_f03_a05_k02.png,3,0.05,2,grid
-rf_f03_a05_k04,stimuli/shapes/rf_f03_a05_k04.png,3,0.05,4,grid
-rf_f03_a05_k08,stimuli/shapes/rf_f03_a05_k08.png,3,0.05,8,grid
-rf_f03_a05_k16,stimuli/shapes/rf_f03_a05_k16.png,3,0.05,16,grid
-rf_f03_a10_k01,stimuli/shapes/rf_f03_a10_k01.png,3,0.1,1,grid
-rf_f03_a10_k02,stimuli/shapes/rf_f03_a10_k02.png,3,0.1,2,grid
-rf_f03_a10_k04,stimuli/shapes/rf_f03_a10_k04.png,3,0.1,4,grid
-rf_f03_a10_k08,stimuli/shapes/rf_f03_a10_k08.png,3,0.1,8,grid
-rf_f03_a10_k16,stimuli/shapes/rf_f03_a10_k16.png,3,0.1,16,grid
-rf_f03_a15_k01,stimuli/shapes/rf_f03_a15_k01.png,3,0.15,1,grid
-rf_f03_a15_k02,stimuli/shapes/rf_f03_a15_k02.png,3,0.15,2,grid
-rf_f03_a15_k04,stimuli/shapes/rf_f03_a15_k04.png,3,0.15,4,grid
-rf_f03_a15_k08,stimuli/shapes/rf_f03_a15_k08.png,3,0.15,8,grid
-rf_f03_a15_k16,stimuli/shapes/rf_f03_a15_k16.png,3,0.15,16,grid
-rf_f03_a20_k01,stimuli/shapes/rf_f03_a20_k01.png,3,0.2,1,anchor_round_1
-rf_f03_a20_k02,stimuli/shapes/rf_f03_a20_k02.png,3,0.2,2,grid
-rf_f03_a20_k04,stimuli/shapes/rf_f03_a20_k04.png,3,0.2,4,grid
-rf_f03_a20_k08,stimuli/shapes/rf_f03_a20_k08.png,3,0.2,8,grid
-rf_f03_a20_k16,stimuli/shapes/rf_f03_a20_k16.png,3,0.2,16,grid
-rf_f03_a25_k01,stimuli/shapes/rf_f03_a25_k01.png,3,0.25,1,grid
-rf_f03_a25_k02,stimuli/shapes/rf_f03_a25_k02.png,3,0.25,2,grid
-rf_f03_a25_k04,stimuli/shapes/rf_f03_a25_k04.png,3,0.25,4,grid
-rf_f03_a25_k08,stimuli/shapes/rf_f03_a25_k08.png,3,0.25,8,grid
-rf_f03_a25_k16,stimuli/shapes/rf_f03_a25_k16.png,3,0.25,16,grid
-rf_f05_a05_k01,stimuli/shapes/rf_f05_a05_k01.png,5,0.05,1,grid
-rf_f05_a05_k02,stimuli/shapes/rf_f05_a05_k02.png,5,0.05,2,grid
-rf_f05_a05_k04,stimuli/shapes/rf_f05_a05_k04.png,5,0.05,4,grid
-rf_f05_a05_k08,stimuli/shapes/rf_f05_a05_k08.png,5,0.05,8,grid
-rf_f05_a05_k16,stimuli/shapes/rf_f05_a05_k16.png,5,0.05,16,grid
-rf_f05_a10_k01,stimuli/shapes/rf_f05_a10_k01.png,5,0.1,1,grid
-rf_f05_a10_k02,stimuli/shapes/rf_f05_a10_k02.png,5,0.1,2,grid
-rf_f05_a10_k04,stimuli/shapes/rf_f05_a10_k04.png,5,0.1,4,grid
-rf_f05_a10_k08,stimuli/shapes/rf_f05_a10_k08.png,5,0.1,8,grid
-rf_f05_a10_k16,stimuli/shapes/rf_f05_a10_k16.png,5,0.1,16,grid
-rf_f05_a15_k01,stimuli/shapes/rf_f05_a15_k01.png,5,0.15,1,anchor_round_0
-rf_f05_a15_k02,stimuli/shapes/rf_f05_a15_k02.png,5,0.15,2,grid
-rf_f05_a15_k04,stimuli/shapes/rf_f05_a15_k04.png,5,0.15,4,grid
-rf_f05_a15_k08,stimuli/shapes/rf_f05_a15_k08.png,5,0.15,8,grid
-rf_f05_a15_k16,stimuli/shapes/rf_f05_a15_k16.png,5,0.15,16,grid
-rf_f05_a20_k01,stimuli/shapes/rf_f05_a20_k01.png,5,0.2,1,grid
-rf_f05_a20_k02,stimuli/shapes/rf_f05_a20_k02.png,5,0.2,2,grid
-rf_f05_a20_k04,stimuli/shapes/rf_f05_a20_k04.png,5,0.2,4,grid
-rf_f05_a20_k08,stimuli/shapes/rf_f05_a20_k08.png,5,0.2,8,grid
-rf_f05_a20_k16,stimuli/shapes/rf_f05_a20_k16.png,5,0.2,16,grid
-rf_f05_a25_k01,stimuli/shapes/rf_f05_a25_k01.png,5,0.25,1,grid
-rf_f05_a25_k02,stimuli/shapes/rf_f05_a25_k02.png,5,0.25,2,grid
-rf_f05_a25_k04,stimuli/shapes/rf_f05_a25_k04.png,5,0.25,4,grid
-rf_f05_a25_k08,stimuli/shapes/rf_f05_a25_k08.png,5,0.25,8,grid
-rf_f05_a25_k16,stimuli/shapes/rf_f05_a25_k16.png,5,0.25,16,grid
-rf_f07_a05_k01,stimuli/shapes/rf_f07_a05_k01.png,7,0.05,1,grid
-rf_f07_a05_k02,stimuli/shapes/rf_f07_a05_k02.png,7,0.05,2,grid
-rf_f07_a05_k04,stimuli/shapes/rf_f07_a05_k04.png,7,0.05,4,grid
-rf_f07_a05_k08,stimuli/shapes/rf_f07_a05_k08.png,7,0.05,8,grid
-rf_f07_a05_k16,stimuli/shapes/rf_f07_a05_k16.png,7,0.05,16,grid
-rf_f07_a10_k01,stimuli/shapes/rf_f07_a10_k01.png,7,0.1,1,anchor_round_2
-rf_f07_a10_k02,stimuli/shapes/rf_f07_a10_k02.png,7,0.1,2,grid
-rf_f07_a10_k04,stimuli/shapes/rf_f07_a10_k04.png,7,0.1,4,grid
-rf_f07_a10_k08,stimuli/shapes/rf_f07_a10_k08.png,7,0.1,8,grid
-rf_f07_a10_k16,stimuli/shapes/rf_f07_a10_k16.png,7,0.1,16,grid
-rf_f07_a15_k01,stimuli/shapes/rf_f07_a15_k01.png,7,0.15,1,grid
-rf_f07_a15_k02,stimuli/shapes/rf_f07_a15_k02.png,7,0.15,2,grid
-rf_f07_a15_k04,stimuli/shapes/rf_f07_a15_k04.png,7,0.15,4,grid
-rf_f07_a15_k08,stimuli/shapes/rf_f07_a15_k08.png,7,0.15,8,grid
-rf_f07_a15_k16,stimuli/shapes/rf_f07_a15_k16.png,7,0.15,16,grid
-rf_f07_a20_k01,stimuli/shapes/rf_f07_a20_k01.png,7,0.2,1,grid
-rf_f07_a20_k02,stimuli/shapes/rf_f07_a20_k02.png,7,0.2,2,grid
-rf_f07_a20_k04,stimuli/shapes/rf_f07_a20_k04.png,7,0.2,4,grid
-rf_f07_a20_k08,stimuli/shapes/rf_f07_a20_k08.png,7,0.2,8,grid
-rf_f07_a20_k16,stimuli/shapes/rf_f07_a20_k16.png,7,0.2,16,grid
-rf_f07_a25_k01,stimuli/shapes/rf_f07_a25_k01.png,7,0.25,1,grid
-rf_f07_a25_k02,stimuli/shapes/rf_f07_a25_k02.png,7,0.25,2,grid
-rf_f07_a25_k04,stimuli/shapes/rf_f07_a25_k04.png,7,0.25,4,grid
-rf_f07_a25_k08,stimuli/shapes/rf_f07_a25_k08.png,7,0.25,8,grid
-rf_f07_a25_k16,stimuli/shapes/rf_f07_a25_k16.png,7,0.25,16,anchor_sharp_2
-rf_f09_a05_k01,stimuli/shapes/rf_f09_a05_k01.png,9,0.05,1,grid
-rf_f09_a05_k02,stimuli/shapes/rf_f09_a05_k02.png,9,0.05,2,grid
-rf_f09_a05_k04,stimuli/shapes/rf_f09_a05_k04.png,9,0.05,4,grid
-rf_f09_a05_k08,stimuli/shapes/rf_f09_a05_k08.png,9,0.05,8,grid
-rf_f09_a05_k16,stimuli/shapes/rf_f09_a05_k16.png,9,0.05,16,grid
-rf_f09_a10_k01,stimuli/shapes/rf_f09_a10_k01.png,9,0.1,1,grid
-rf_f09_a10_k02,stimuli/shapes/rf_f09_a10_k02.png,9,0.1,2,grid
-rf_f09_a10_k04,stimuli/shapes/rf_f09_a10_k04.png,9,0.1,4,grid
-rf_f09_a10_k08,stimuli/shapes/rf_f09_a10_k08.png,9,0.1,8,grid
-rf_f09_a10_k16,stimuli/shapes/rf_f09_a10_k16.png,9,0.1,16,grid
-rf_f09_a15_k01,stimuli/shapes/rf_f09_a15_k01.png,9,0.15,1,grid
-rf_f09_a15_k02,stimuli/shapes/rf_f09_a15_k02.png,9,0.15,2,grid
-rf_f09_a15_k04,stimuli/shapes/rf_f09_a15_k04.png,9,0.15,4,grid
-rf_f09_a15_k08,stimuli/shapes/rf_f09_a15_k08.png,9,0.15,8,grid
-rf_f09_a15_k16,stimuli/shapes/rf_f09_a15_k16.png,9,0.15,16,grid
-rf_f09_a20_k01,stimuli/shapes/rf_f09_a20_k01.png,9,0.2,1,grid
-rf_f09_a20_k02,stimuli/shapes/rf_f09_a20_k02.png,9,0.2,2,grid
-rf_f09_a20_k04,stimuli/shapes/rf_f09_a20_k04.png,9,0.2,4,grid
-rf_f09_a20_k08,stimuli/shapes/rf_f09_a20_k08.png,9,0.2,8,grid
-rf_f09_a20_k16,stimuli/shapes/rf_f09_a20_k16.png,9,0.2,16,grid
-rf_f09_a25_k01,stimuli/shapes/rf_f09_a25_k01.png,9,0.25,1,grid
-rf_f09_a25_k02,stimuli/shapes/rf_f09_a25_k02.png,9,0.25,2,grid
-rf_f09_a25_k04,stimuli/shapes/rf_f09_a25_k04.png,9,0.25,4,grid
-rf_f09_a25_k08,stimuli/shapes/rf_f09_a25_k08.png,9,0.25,8,anchor_sharp_1
-rf_f09_a25_k16,stimuli/shapes/rf_f09_a25_k16.png,9,0.25,16,grid
-rf_f11_a05_k01,stimuli/shapes/rf_f11_a05_k01.png,11,0.05,1,grid
-rf_f11_a05_k02,stimuli/shapes/rf_f11_a05_k02.png,11,0.05,2,grid
-rf_f11_a05_k04,stimuli/shapes/rf_f11_a05_k04.png,11,0.05,4,grid
-rf_f11_a05_k08,stimuli/shapes/rf_f11_a05_k08.png,11,0.05,8,grid
-rf_f11_a05_k16,stimuli/shapes/rf_f11_a05_k16.png,11,0.05,16,grid
-rf_f11_a10_k01,stimuli/shapes/rf_f11_a10_k01.png,11,0.1,1,grid
-rf_f11_a10_k02,stimuli/shapes/rf_f11_a10_k02.png,11,0.1,2,grid
-rf_f11_a10_k04,stimuli/shapes/rf_f11_a10_k04.png,11,0.1,4,grid
-rf_f11_a10_k08,stimuli/shapes/rf_f11_a10_k08.png,11,0.1,8,grid
-rf_f11_a10_k16,stimuli/shapes/rf_f11_a10_k16.png,11,0.1,16,grid
-rf_f11_a15_k01,stimuli/shapes/rf_f11_a15_k01.png,11,0.15,1,grid
-rf_f11_a15_k02,stimuli/shapes/rf_f11_a15_k02.png,11,0.15,2,grid
-rf_f11_a15_k04,stimuli/shapes/rf_f11_a15_k04.png,11,0.15,4,grid
-rf_f11_a15_k08,stimuli/shapes/rf_f11_a15_k08.png,11,0.15,8,grid
-rf_f11_a15_k16,stimuli/shapes/rf_f11_a15_k16.png,11,0.15,16,grid
-rf_f11_a20_k01,stimuli/shapes/rf_f11_a20_k01.png,11,0.2,1,grid
-rf_f11_a20_k02,stimuli/shapes/rf_f11_a20_k02.png,11,0.2,2,grid
-rf_f11_a20_k04,stimuli/shapes/rf_f11_a20_k04.png,11,0.2,4,grid
-rf_f11_a20_k08,stimuli/shapes/rf_f11_a20_k08.png,11,0.2,8,grid
-rf_f11_a20_k16,stimuli/shapes/rf_f11_a20_k16.png,11,0.2,16,grid
-rf_f11_a25_k01,stimuli/shapes/rf_f11_a25_k01.png,11,0.25,1,grid
-rf_f11_a25_k02,stimuli/shapes/rf_f11_a25_k02.png,11,0.25,2,grid
-rf_f11_a25_k04,stimuli/shapes/rf_f11_a25_k04.png,11,0.25,4,grid
-rf_f11_a25_k08,stimuli/shapes/rf_f11_a25_k08.png,11,0.25,8,grid
-rf_f11_a25_k16,stimuli/shapes/rf_f11_a25_k16.png,11,0.25,16,anchor_sharp_0
+shape_id,set,file,frequency,amplitude,spikiness,role,pair,source
+rf_f03_a05_k01,mixed,stimuli/shapes/rf_f03_a05_k01.png,3,0.05,1,grid,,"our own radial shapes, spikes on a round body"
+rf_f03_a05_k02,mixed,stimuli/shapes/rf_f03_a05_k02.png,3,0.05,2,grid,,"our own radial shapes, spikes on a round body"
+rf_f03_a05_k04,mixed,stimuli/shapes/rf_f03_a05_k04.png,3,0.05,4,grid,,"our own radial shapes, spikes on a round body"
+rf_f03_a05_k08,mixed,stimuli/shapes/rf_f03_a05_k08.png,3,0.05,8,grid,,"our own radial shapes, spikes on a round body"
+rf_f03_a05_k16,mixed,stimuli/shapes/rf_f03_a05_k16.png,3,0.05,16,grid,,"our own radial shapes, spikes on a round body"
+rf_f03_a10_k01,mixed,stimuli/shapes/rf_f03_a10_k01.png,3,0.1,1,grid,,"our own radial shapes, spikes on a round body"
+rf_f03_a10_k02,mixed,stimuli/shapes/rf_f03_a10_k02.png,3,0.1,2,grid,,"our own radial shapes, spikes on a round body"
+rf_f03_a10_k04,mixed,stimuli/shapes/rf_f03_a10_k04.png,3,0.1,4,grid,,"our own radial shapes, spikes on a round body"
+rf_f03_a10_k08,mixed,stimuli/shapes/rf_f03_a10_k08.png,3,0.1,8,grid,,"our own radial shapes, spikes on a round body"
+rf_f03_a10_k16,mixed,stimuli/shapes/rf_f03_a10_k16.png,3,0.1,16,grid,,"our own radial shapes, spikes on a round body"
+rf_f03_a15_k01,mixed,stimuli/shapes/rf_f03_a15_k01.png,3,0.15,1,grid,,"our own radial shapes, spikes on a round body"
+rf_f03_a15_k02,mixed,stimuli/shapes/rf_f03_a15_k02.png,3,0.15,2,grid,,"our own radial shapes, spikes on a round body"
+rf_f03_a15_k04,mixed,stimuli/shapes/rf_f03_a15_k04.png,3,0.15,4,grid,,"our own radial shapes, spikes on a round body"
+rf_f03_a15_k08,mixed,stimuli/shapes/rf_f03_a15_k08.png,3,0.15,8,grid,,"our own radial shapes, spikes on a round body"
+rf_f03_a15_k16,mixed,stimuli/shapes/rf_f03_a15_k16.png,3,0.15,16,grid,,"our own radial shapes, spikes on a round body"
+rf_f03_a20_k01,mixed,stimuli/shapes/rf_f03_a20_k01.png,3,0.2,1,anchor_round_1,,"our own radial shapes, spikes on a round body"
+rf_f03_a20_k02,mixed,stimuli/shapes/rf_f03_a20_k02.png,3,0.2,2,grid,,"our own radial shapes, spikes on a round body"
+rf_f03_a20_k04,mixed,stimuli/shapes/rf_f03_a20_k04.png,3,0.2,4,grid,,"our own radial shapes, spikes on a round body"
+rf_f03_a20_k08,mixed,stimuli/shapes/rf_f03_a20_k08.png,3,0.2,8,grid,,"our own radial shapes, spikes on a round body"
+rf_f03_a20_k16,mixed,stimuli/shapes/rf_f03_a20_k16.png,3,0.2,16,grid,,"our own radial shapes, spikes on a round body"
+rf_f03_a25_k01,mixed,stimuli/shapes/rf_f03_a25_k01.png,3,0.25,1,grid,,"our own radial shapes, spikes on a round body"
+rf_f03_a25_k02,mixed,stimuli/shapes/rf_f03_a25_k02.png,3,0.25,2,grid,,"our own radial shapes, spikes on a round body"
+rf_f03_a25_k04,mixed,stimuli/shapes/rf_f03_a25_k04.png,3,0.25,4,grid,,"our own radial shapes, spikes on a round body"
+rf_f03_a25_k08,mixed,stimuli/shapes/rf_f03_a25_k08.png,3,0.25,8,grid,,"our own radial shapes, spikes on a round body"
+rf_f03_a25_k16,mixed,stimuli/shapes/rf_f03_a25_k16.png,3,0.25,16,grid,,"our own radial shapes, spikes on a round body"
+rf_f05_a05_k01,mixed,stimuli/shapes/rf_f05_a05_k01.png,5,0.05,1,grid,,"our own radial shapes, spikes on a round body"
+rf_f05_a05_k02,mixed,stimuli/shapes/rf_f05_a05_k02.png,5,0.05,2,grid,,"our own radial shapes, spikes on a round body"
+rf_f05_a05_k04,mixed,stimuli/shapes/rf_f05_a05_k04.png,5,0.05,4,grid,,"our own radial shapes, spikes on a round body"
+rf_f05_a05_k08,mixed,stimuli/shapes/rf_f05_a05_k08.png,5,0.05,8,grid,,"our own radial shapes, spikes on a round body"
+rf_f05_a05_k16,mixed,stimuli/shapes/rf_f05_a05_k16.png,5,0.05,16,grid,,"our own radial shapes, spikes on a round body"
+rf_f05_a10_k01,mixed,stimuli/shapes/rf_f05_a10_k01.png,5,0.1,1,grid,,"our own radial shapes, spikes on a round body"
+rf_f05_a10_k02,mixed,stimuli/shapes/rf_f05_a10_k02.png,5,0.1,2,grid,,"our own radial shapes, spikes on a round body"
+rf_f05_a10_k04,mixed,stimuli/shapes/rf_f05_a10_k04.png,5,0.1,4,grid,,"our own radial shapes, spikes on a round body"
+rf_f05_a10_k08,mixed,stimuli/shapes/rf_f05_a10_k08.png,5,0.1,8,grid,,"our own radial shapes, spikes on a round body"
+rf_f05_a10_k16,mixed,stimuli/shapes/rf_f05_a10_k16.png,5,0.1,16,grid,,"our own radial shapes, spikes on a round body"
+rf_f05_a15_k01,mixed,stimuli/shapes/rf_f05_a15_k01.png,5,0.15,1,anchor_round_0,,"our own radial shapes, spikes on a round body"
+rf_f05_a15_k02,mixed,stimuli/shapes/rf_f05_a15_k02.png,5,0.15,2,grid,,"our own radial shapes, spikes on a round body"
+rf_f05_a15_k04,mixed,stimuli/shapes/rf_f05_a15_k04.png,5,0.15,4,grid,,"our own radial shapes, spikes on a round body"
+rf_f05_a15_k08,mixed,stimuli/shapes/rf_f05_a15_k08.png,5,0.15,8,grid,,"our own radial shapes, spikes on a round body"
+rf_f05_a15_k16,mixed,stimuli/shapes/rf_f05_a15_k16.png,5,0.15,16,grid,,"our own radial shapes, spikes on a round body"
+rf_f05_a20_k01,mixed,stimuli/shapes/rf_f05_a20_k01.png,5,0.2,1,grid,,"our own radial shapes, spikes on a round body"
+rf_f05_a20_k02,mixed,stimuli/shapes/rf_f05_a20_k02.png,5,0.2,2,grid,,"our own radial shapes, spikes on a round body"
+rf_f05_a20_k04,mixed,stimuli/shapes/rf_f05_a20_k04.png,5,0.2,4,grid,,"our own radial shapes, spikes on a round body"
+rf_f05_a20_k08,mixed,stimuli/shapes/rf_f05_a20_k08.png,5,0.2,8,grid,,"our own radial shapes, spikes on a round body"
+rf_f05_a20_k16,mixed,stimuli/shapes/rf_f05_a20_k16.png,5,0.2,16,grid,,"our own radial shapes, spikes on a round body"
+rf_f05_a25_k01,mixed,stimuli/shapes/rf_f05_a25_k01.png,5,0.25,1,grid,,"our own radial shapes, spikes on a round body"
+rf_f05_a25_k02,mixed,stimuli/shapes/rf_f05_a25_k02.png,5,0.25,2,grid,,"our own radial shapes, spikes on a round body"
+rf_f05_a25_k04,mixed,stimuli/shapes/rf_f05_a25_k04.png,5,0.25,4,grid,,"our own radial shapes, spikes on a round body"
+rf_f05_a25_k08,mixed,stimuli/shapes/rf_f05_a25_k08.png,5,0.25,8,grid,,"our own radial shapes, spikes on a round body"
+rf_f05_a25_k16,mixed,stimuli/shapes/rf_f05_a25_k16.png,5,0.25,16,grid,,"our own radial shapes, spikes on a round body"
+rf_f07_a05_k01,mixed,stimuli/shapes/rf_f07_a05_k01.png,7,0.05,1,grid,,"our own radial shapes, spikes on a round body"
+rf_f07_a05_k02,mixed,stimuli/shapes/rf_f07_a05_k02.png,7,0.05,2,grid,,"our own radial shapes, spikes on a round body"
+rf_f07_a05_k04,mixed,stimuli/shapes/rf_f07_a05_k04.png,7,0.05,4,grid,,"our own radial shapes, spikes on a round body"
+rf_f07_a05_k08,mixed,stimuli/shapes/rf_f07_a05_k08.png,7,0.05,8,grid,,"our own radial shapes, spikes on a round body"
+rf_f07_a05_k16,mixed,stimuli/shapes/rf_f07_a05_k16.png,7,0.05,16,grid,,"our own radial shapes, spikes on a round body"
+rf_f07_a10_k01,mixed,stimuli/shapes/rf_f07_a10_k01.png,7,0.1,1,anchor_round_2,,"our own radial shapes, spikes on a round body"
+rf_f07_a10_k02,mixed,stimuli/shapes/rf_f07_a10_k02.png,7,0.1,2,grid,,"our own radial shapes, spikes on a round body"
+rf_f07_a10_k04,mixed,stimuli/shapes/rf_f07_a10_k04.png,7,0.1,4,grid,,"our own radial shapes, spikes on a round body"
+rf_f07_a10_k08,mixed,stimuli/shapes/rf_f07_a10_k08.png,7,0.1,8,grid,,"our own radial shapes, spikes on a round body"
+rf_f07_a10_k16,mixed,stimuli/shapes/rf_f07_a10_k16.png,7,0.1,16,grid,,"our own radial shapes, spikes on a round body"
+rf_f07_a15_k01,mixed,stimuli/shapes/rf_f07_a15_k01.png,7,0.15,1,grid,,"our own radial shapes, spikes on a round body"
+rf_f07_a15_k02,mixed,stimuli/shapes/rf_f07_a15_k02.png,7,0.15,2,grid,,"our own radial shapes, spikes on a round body"
+rf_f07_a15_k04,mixed,stimuli/shapes/rf_f07_a15_k04.png,7,0.15,4,grid,,"our own radial shapes, spikes on a round body"
+rf_f07_a15_k08,mixed,stimuli/shapes/rf_f07_a15_k08.png,7,0.15,8,grid,,"our own radial shapes, spikes on a round body"
+rf_f07_a15_k16,mixed,stimuli/shapes/rf_f07_a15_k16.png,7,0.15,16,grid,,"our own radial shapes, spikes on a round body"
+rf_f07_a20_k01,mixed,stimuli/shapes/rf_f07_a20_k01.png,7,0.2,1,grid,,"our own radial shapes, spikes on a round body"
+rf_f07_a20_k02,mixed,stimuli/shapes/rf_f07_a20_k02.png,7,0.2,2,grid,,"our own radial shapes, spikes on a round body"
+rf_f07_a20_k04,mixed,stimuli/shapes/rf_f07_a20_k04.png,7,0.2,4,grid,,"our own radial shapes, spikes on a round body"
+rf_f07_a20_k08,mixed,stimuli/shapes/rf_f07_a20_k08.png,7,0.2,8,grid,,"our own radial shapes, spikes on a round body"
+rf_f07_a20_k16,mixed,stimuli/shapes/rf_f07_a20_k16.png,7,0.2,16,grid,,"our own radial shapes, spikes on a round body"
+rf_f07_a25_k01,mixed,stimuli/shapes/rf_f07_a25_k01.png,7,0.25,1,grid,,"our own radial shapes, spikes on a round body"
+rf_f07_a25_k02,mixed,stimuli/shapes/rf_f07_a25_k02.png,7,0.25,2,grid,,"our own radial shapes, spikes on a round body"
+rf_f07_a25_k04,mixed,stimuli/shapes/rf_f07_a25_k04.png,7,0.25,4,grid,,"our own radial shapes, spikes on a round body"
+rf_f07_a25_k08,mixed,stimuli/shapes/rf_f07_a25_k08.png,7,0.25,8,grid,,"our own radial shapes, spikes on a round body"
+rf_f07_a25_k16,mixed,stimuli/shapes/rf_f07_a25_k16.png,7,0.25,16,anchor_sharp_2,,"our own radial shapes, spikes on a round body"
+rf_f09_a05_k01,mixed,stimuli/shapes/rf_f09_a05_k01.png,9,0.05,1,grid,,"our own radial shapes, spikes on a round body"
+rf_f09_a05_k02,mixed,stimuli/shapes/rf_f09_a05_k02.png,9,0.05,2,grid,,"our own radial shapes, spikes on a round body"
+rf_f09_a05_k04,mixed,stimuli/shapes/rf_f09_a05_k04.png,9,0.05,4,grid,,"our own radial shapes, spikes on a round body"
+rf_f09_a05_k08,mixed,stimuli/shapes/rf_f09_a05_k08.png,9,0.05,8,grid,,"our own radial shapes, spikes on a round body"
+rf_f09_a05_k16,mixed,stimuli/shapes/rf_f09_a05_k16.png,9,0.05,16,grid,,"our own radial shapes, spikes on a round body"
+rf_f09_a10_k01,mixed,stimuli/shapes/rf_f09_a10_k01.png,9,0.1,1,grid,,"our own radial shapes, spikes on a round body"
+rf_f09_a10_k02,mixed,stimuli/shapes/rf_f09_a10_k02.png,9,0.1,2,grid,,"our own radial shapes, spikes on a round body"
+rf_f09_a10_k04,mixed,stimuli/shapes/rf_f09_a10_k04.png,9,0.1,4,grid,,"our own radial shapes, spikes on a round body"
+rf_f09_a10_k08,mixed,stimuli/shapes/rf_f09_a10_k08.png,9,0.1,8,grid,,"our own radial shapes, spikes on a round body"
+rf_f09_a10_k16,mixed,stimuli/shapes/rf_f09_a10_k16.png,9,0.1,16,grid,,"our own radial shapes, spikes on a round body"
+rf_f09_a15_k01,mixed,stimuli/shapes/rf_f09_a15_k01.png,9,0.15,1,grid,,"our own radial shapes, spikes on a round body"
+rf_f09_a15_k02,mixed,stimuli/shapes/rf_f09_a15_k02.png,9,0.15,2,grid,,"our own radial shapes, spikes on a round body"
+rf_f09_a15_k04,mixed,stimuli/shapes/rf_f09_a15_k04.png,9,0.15,4,grid,,"our own radial shapes, spikes on a round body"
+rf_f09_a15_k08,mixed,stimuli/shapes/rf_f09_a15_k08.png,9,0.15,8,grid,,"our own radial shapes, spikes on a round body"
+rf_f09_a15_k16,mixed,stimuli/shapes/rf_f09_a15_k16.png,9,0.15,16,grid,,"our own radial shapes, spikes on a round body"
+rf_f09_a20_k01,mixed,stimuli/shapes/rf_f09_a20_k01.png,9,0.2,1,grid,,"our own radial shapes, spikes on a round body"
+rf_f09_a20_k02,mixed,stimuli/shapes/rf_f09_a20_k02.png,9,0.2,2,grid,,"our own radial shapes, spikes on a round body"
+rf_f09_a20_k04,mixed,stimuli/shapes/rf_f09_a20_k04.png,9,0.2,4,grid,,"our own radial shapes, spikes on a round body"
+rf_f09_a20_k08,mixed,stimuli/shapes/rf_f09_a20_k08.png,9,0.2,8,grid,,"our own radial shapes, spikes on a round body"
+rf_f09_a20_k16,mixed,stimuli/shapes/rf_f09_a20_k16.png,9,0.2,16,grid,,"our own radial shapes, spikes on a round body"
+rf_f09_a25_k01,mixed,stimuli/shapes/rf_f09_a25_k01.png,9,0.25,1,grid,,"our own radial shapes, spikes on a round body"
+rf_f09_a25_k02,mixed,stimuli/shapes/rf_f09_a25_k02.png,9,0.25,2,grid,,"our own radial shapes, spikes on a round body"
+rf_f09_a25_k04,mixed,stimuli/shapes/rf_f09_a25_k04.png,9,0.25,4,grid,,"our own radial shapes, spikes on a round body"
+rf_f09_a25_k08,mixed,stimuli/shapes/rf_f09_a25_k08.png,9,0.25,8,anchor_sharp_1,,"our own radial shapes, spikes on a round body"
+rf_f09_a25_k16,mixed,stimuli/shapes/rf_f09_a25_k16.png,9,0.25,16,grid,,"our own radial shapes, spikes on a round body"
+rf_f11_a05_k01,mixed,stimuli/shapes/rf_f11_a05_k01.png,11,0.05,1,grid,,"our own radial shapes, spikes on a round body"
+rf_f11_a05_k02,mixed,stimuli/shapes/rf_f11_a05_k02.png,11,0.05,2,grid,,"our own radial shapes, spikes on a round body"
+rf_f11_a05_k04,mixed,stimuli/shapes/rf_f11_a05_k04.png,11,0.05,4,grid,,"our own radial shapes, spikes on a round body"
+rf_f11_a05_k08,mixed,stimuli/shapes/rf_f11_a05_k08.png,11,0.05,8,grid,,"our own radial shapes, spikes on a round body"
+rf_f11_a05_k16,mixed,stimuli/shapes/rf_f11_a05_k16.png,11,0.05,16,grid,,"our own radial shapes, spikes on a round body"
+rf_f11_a10_k01,mixed,stimuli/shapes/rf_f11_a10_k01.png,11,0.1,1,grid,,"our own radial shapes, spikes on a round body"
+rf_f11_a10_k02,mixed,stimuli/shapes/rf_f11_a10_k02.png,11,0.1,2,grid,,"our own radial shapes, spikes on a round body"
+rf_f11_a10_k04,mixed,stimuli/shapes/rf_f11_a10_k04.png,11,0.1,4,grid,,"our own radial shapes, spikes on a round body"
+rf_f11_a10_k08,mixed,stimuli/shapes/rf_f11_a10_k08.png,11,0.1,8,grid,,"our own radial shapes, spikes on a round body"
+rf_f11_a10_k16,mixed,stimuli/shapes/rf_f11_a10_k16.png,11,0.1,16,grid,,"our own radial shapes, spikes on a round body"
+rf_f11_a15_k01,mixed,stimuli/shapes/rf_f11_a15_k01.png,11,0.15,1,grid,,"our own radial shapes, spikes on a round body"
+rf_f11_a15_k02,mixed,stimuli/shapes/rf_f11_a15_k02.png,11,0.15,2,grid,,"our own radial shapes, spikes on a round body"
+rf_f11_a15_k04,mixed,stimuli/shapes/rf_f11_a15_k04.png,11,0.15,4,grid,,"our own radial shapes, spikes on a round body"
+rf_f11_a15_k08,mixed,stimuli/shapes/rf_f11_a15_k08.png,11,0.15,8,grid,,"our own radial shapes, spikes on a round body"
+rf_f11_a15_k16,mixed,stimuli/shapes/rf_f11_a15_k16.png,11,0.15,16,grid,,"our own radial shapes, spikes on a round body"
+rf_f11_a20_k01,mixed,stimuli/shapes/rf_f11_a20_k01.png,11,0.2,1,grid,,"our own radial shapes, spikes on a round body"
+rf_f11_a20_k02,mixed,stimuli/shapes/rf_f11_a20_k02.png,11,0.2,2,grid,,"our own radial shapes, spikes on a round body"
+rf_f11_a20_k04,mixed,stimuli/shapes/rf_f11_a20_k04.png,11,0.2,4,grid,,"our own radial shapes, spikes on a round body"
+rf_f11_a20_k08,mixed,stimuli/shapes/rf_f11_a20_k08.png,11,0.2,8,grid,,"our own radial shapes, spikes on a round body"
+rf_f11_a20_k16,mixed,stimuli/shapes/rf_f11_a20_k16.png,11,0.2,16,grid,,"our own radial shapes, spikes on a round body"
+rf_f11_a25_k01,mixed,stimuli/shapes/rf_f11_a25_k01.png,11,0.25,1,grid,,"our own radial shapes, spikes on a round body"
+rf_f11_a25_k02,mixed,stimuli/shapes/rf_f11_a25_k02.png,11,0.25,2,grid,,"our own radial shapes, spikes on a round body"
+rf_f11_a25_k04,mixed,stimuli/shapes/rf_f11_a25_k04.png,11,0.25,4,grid,,"our own radial shapes, spikes on a round body"
+rf_f11_a25_k08,mixed,stimuli/shapes/rf_f11_a25_k08.png,11,0.25,8,grid,,"our own radial shapes, spikes on a round body"
+rf_f11_a25_k16,mixed,stimuli/shapes/rf_f11_a25_k16.png,11,0.25,16,anchor_sharp_0,,"our own radial shapes, spikes on a round body"
+chen_f4_a10_n00,chen,stimuli/shapes/chen/chen_f4_a10_n00.png,4,0.1,0,grid,,Chen et al. (2016) equations
+chen_f4_a10_n01,chen,stimuli/shapes/chen/chen_f4_a10_n01.png,4,0.1,1,grid,,Chen et al. (2016) equations
+chen_f4_a10_n30,chen,stimuli/shapes/chen/chen_f4_a10_n30.png,4,0.1,30,grid,,Chen et al. (2016) equations
+chen_f4_a20_n00,chen,stimuli/shapes/chen/chen_f4_a20_n00.png,4,0.2,0,grid,,Chen et al. (2016) equations
+chen_f4_a20_n01,chen,stimuli/shapes/chen/chen_f4_a20_n01.png,4,0.2,1,grid,,Chen et al. (2016) equations
+chen_f4_a20_n30,chen,stimuli/shapes/chen/chen_f4_a20_n30.png,4,0.2,30,grid,,Chen et al. (2016) equations
+chen_f4_a30_n00,chen,stimuli/shapes/chen/chen_f4_a30_n00.png,4,0.3,0,grid,,Chen et al. (2016) equations
+chen_f4_a30_n01,chen,stimuli/shapes/chen/chen_f4_a30_n01.png,4,0.3,1,grid,,Chen et al. (2016) equations
+chen_f4_a30_n30,chen,stimuli/shapes/chen/chen_f4_a30_n30.png,4,0.3,30,grid,,Chen et al. (2016) equations
+chen_f4_a40_n00,chen,stimuli/shapes/chen/chen_f4_a40_n00.png,4,0.4,0,grid,,Chen et al. (2016) equations
+chen_f4_a40_n01,chen,stimuli/shapes/chen/chen_f4_a40_n01.png,4,0.4,1,grid,,Chen et al. (2016) equations
+chen_f4_a40_n30,chen,stimuli/shapes/chen/chen_f4_a40_n30.png,4,0.4,30,grid,,Chen et al. (2016) equations
+chen_f5_a10_n00,chen,stimuli/shapes/chen/chen_f5_a10_n00.png,5,0.1,0,grid,,Chen et al. (2016) equations
+chen_f5_a10_n01,chen,stimuli/shapes/chen/chen_f5_a10_n01.png,5,0.1,1,grid,,Chen et al. (2016) equations
+chen_f5_a10_n30,chen,stimuli/shapes/chen/chen_f5_a10_n30.png,5,0.1,30,grid,,Chen et al. (2016) equations
+chen_f5_a20_n00,chen,stimuli/shapes/chen/chen_f5_a20_n00.png,5,0.2,0,grid,,Chen et al. (2016) equations
+chen_f5_a20_n01,chen,stimuli/shapes/chen/chen_f5_a20_n01.png,5,0.2,1,grid,,Chen et al. (2016) equations
+chen_f5_a20_n30,chen,stimuli/shapes/chen/chen_f5_a20_n30.png,5,0.2,30,grid,,Chen et al. (2016) equations
+chen_f5_a30_n00,chen,stimuli/shapes/chen/chen_f5_a30_n00.png,5,0.3,0,grid,,Chen et al. (2016) equations
+chen_f5_a30_n01,chen,stimuli/shapes/chen/chen_f5_a30_n01.png,5,0.3,1,grid,,Chen et al. (2016) equations
+chen_f5_a30_n30,chen,stimuli/shapes/chen/chen_f5_a30_n30.png,5,0.3,30,grid,,Chen et al. (2016) equations
+chen_f5_a40_n00,chen,stimuli/shapes/chen/chen_f5_a40_n00.png,5,0.4,0,grid,,Chen et al. (2016) equations
+chen_f5_a40_n01,chen,stimuli/shapes/chen/chen_f5_a40_n01.png,5,0.4,1,grid,,Chen et al. (2016) equations
+chen_f5_a40_n30,chen,stimuli/shapes/chen/chen_f5_a40_n30.png,5,0.4,30,grid,,Chen et al. (2016) equations
+chen_f6_a10_n00,chen,stimuli/shapes/chen/chen_f6_a10_n00.png,6,0.1,0,grid,,Chen et al. (2016) equations
+chen_f6_a10_n01,chen,stimuli/shapes/chen/chen_f6_a10_n01.png,6,0.1,1,grid,,Chen et al. (2016) equations
+chen_f6_a10_n30,chen,stimuli/shapes/chen/chen_f6_a10_n30.png,6,0.1,30,grid,,Chen et al. (2016) equations
+chen_f6_a20_n00,chen,stimuli/shapes/chen/chen_f6_a20_n00.png,6,0.2,0,grid,,Chen et al. (2016) equations
+chen_f6_a20_n01,chen,stimuli/shapes/chen/chen_f6_a20_n01.png,6,0.2,1,grid,,Chen et al. (2016) equations
+chen_f6_a20_n30,chen,stimuli/shapes/chen/chen_f6_a20_n30.png,6,0.2,30,grid,,Chen et al. (2016) equations
+chen_f6_a30_n00,chen,stimuli/shapes/chen/chen_f6_a30_n00.png,6,0.3,0,grid,,Chen et al. (2016) equations
+chen_f6_a30_n01,chen,stimuli/shapes/chen/chen_f6_a30_n01.png,6,0.3,1,grid,,Chen et al. (2016) equations
+chen_f6_a30_n30,chen,stimuli/shapes/chen/chen_f6_a30_n30.png,6,0.3,30,grid,,Chen et al. (2016) equations
+chen_f6_a40_n00,chen,stimuli/shapes/chen/chen_f6_a40_n00.png,6,0.4,0,grid,,Chen et al. (2016) equations
+chen_f6_a40_n01,chen,stimuli/shapes/chen/chen_f6_a40_n01.png,6,0.4,1,grid,,Chen et al. (2016) equations
+chen_f6_a40_n30,chen,stimuli/shapes/chen/chen_f6_a40_n30.png,6,0.4,30,grid,,Chen et al. (2016) equations
+chen_f7_a10_n00,chen,stimuli/shapes/chen/chen_f7_a10_n00.png,7,0.1,0,grid,,Chen et al. (2016) equations
+chen_f7_a10_n01,chen,stimuli/shapes/chen/chen_f7_a10_n01.png,7,0.1,1,grid,,Chen et al. (2016) equations
+chen_f7_a10_n30,chen,stimuli/shapes/chen/chen_f7_a10_n30.png,7,0.1,30,grid,,Chen et al. (2016) equations
+chen_f7_a20_n00,chen,stimuli/shapes/chen/chen_f7_a20_n00.png,7,0.2,0,grid,,Chen et al. (2016) equations
+chen_f7_a20_n01,chen,stimuli/shapes/chen/chen_f7_a20_n01.png,7,0.2,1,grid,,Chen et al. (2016) equations
+chen_f7_a20_n30,chen,stimuli/shapes/chen/chen_f7_a20_n30.png,7,0.2,30,grid,,Chen et al. (2016) equations
+chen_f7_a30_n00,chen,stimuli/shapes/chen/chen_f7_a30_n00.png,7,0.3,0,grid,,Chen et al. (2016) equations
+chen_f7_a30_n01,chen,stimuli/shapes/chen/chen_f7_a30_n01.png,7,0.3,1,grid,,Chen et al. (2016) equations
+chen_f7_a30_n30,chen,stimuli/shapes/chen/chen_f7_a30_n30.png,7,0.3,30,grid,,Chen et al. (2016) equations
+chen_f7_a40_n00,chen,stimuli/shapes/chen/chen_f7_a40_n00.png,7,0.4,0,grid,,Chen et al. (2016) equations
+chen_f7_a40_n01,chen,stimuli/shapes/chen/chen_f7_a40_n01.png,7,0.4,1,grid,,Chen et al. (2016) equations
+chen_f7_a40_n30,chen,stimuli/shapes/chen/chen_f7_a40_n30.png,7,0.4,30,grid,,Chen et al. (2016) equations
+chen_f8_a10_n00,chen,stimuli/shapes/chen/chen_f8_a10_n00.png,8,0.1,0,grid,,Chen et al. (2016) equations
+chen_f8_a10_n01,chen,stimuli/shapes/chen/chen_f8_a10_n01.png,8,0.1,1,grid,,Chen et al. (2016) equations
+chen_f8_a10_n30,chen,stimuli/shapes/chen/chen_f8_a10_n30.png,8,0.1,30,grid,,Chen et al. (2016) equations
+chen_f8_a20_n00,chen,stimuli/shapes/chen/chen_f8_a20_n00.png,8,0.2,0,grid,,Chen et al. (2016) equations
+chen_f8_a20_n01,chen,stimuli/shapes/chen/chen_f8_a20_n01.png,8,0.2,1,grid,,Chen et al. (2016) equations
+chen_f8_a20_n30,chen,stimuli/shapes/chen/chen_f8_a20_n30.png,8,0.2,30,grid,,Chen et al. (2016) equations
+chen_f8_a30_n00,chen,stimuli/shapes/chen/chen_f8_a30_n00.png,8,0.3,0,grid,,Chen et al. (2016) equations
+chen_f8_a30_n01,chen,stimuli/shapes/chen/chen_f8_a30_n01.png,8,0.3,1,grid,,Chen et al. (2016) equations
+chen_f8_a30_n30,chen,stimuli/shapes/chen/chen_f8_a30_n30.png,8,0.3,30,grid,,Chen et al. (2016) equations
+chen_f8_a40_n00,chen,stimuli/shapes/chen/chen_f8_a40_n00.png,8,0.4,0,grid,,Chen et al. (2016) equations
+chen_f8_a40_n01,chen,stimuli/shapes/chen/chen_f8_a40_n01.png,8,0.4,1,grid,,Chen et al. (2016) equations
+chen_f8_a40_n30,chen,stimuli/shapes/chen/chen_f8_a40_n30.png,8,0.4,30,grid,,Chen et al. (2016) equations
+chen_f9_a10_n00,chen,stimuli/shapes/chen/chen_f9_a10_n00.png,9,0.1,0,grid,,Chen et al. (2016) equations
+chen_f9_a10_n01,chen,stimuli/shapes/chen/chen_f9_a10_n01.png,9,0.1,1,grid,,Chen et al. (2016) equations
+chen_f9_a10_n30,chen,stimuli/shapes/chen/chen_f9_a10_n30.png,9,0.1,30,grid,,Chen et al. (2016) equations
+chen_f9_a20_n00,chen,stimuli/shapes/chen/chen_f9_a20_n00.png,9,0.2,0,grid,,Chen et al. (2016) equations
+chen_f9_a20_n01,chen,stimuli/shapes/chen/chen_f9_a20_n01.png,9,0.2,1,grid,,Chen et al. (2016) equations
+chen_f9_a20_n30,chen,stimuli/shapes/chen/chen_f9_a20_n30.png,9,0.2,30,grid,,Chen et al. (2016) equations
+chen_f9_a30_n00,chen,stimuli/shapes/chen/chen_f9_a30_n00.png,9,0.3,0,grid,,Chen et al. (2016) equations
+chen_f9_a30_n01,chen,stimuli/shapes/chen/chen_f9_a30_n01.png,9,0.3,1,grid,,Chen et al. (2016) equations
+chen_f9_a30_n30,chen,stimuli/shapes/chen/chen_f9_a30_n30.png,9,0.3,30,grid,,Chen et al. (2016) equations
+chen_f9_a40_n00,chen,stimuli/shapes/chen/chen_f9_a40_n00.png,9,0.4,0,grid,,Chen et al. (2016) equations
+chen_f9_a40_n01,chen,stimuli/shapes/chen/chen_f9_a40_n01.png,9,0.4,1,grid,,Chen et al. (2016) equations
+chen_f9_a40_n30,chen,stimuli/shapes/chen/chen_f9_a40_n30.png,9,0.4,30,grid,,Chen et al. (2016) equations
+kohler_round,classic,stimuli/shapes/classic/kohler_round.png,,,,round,kohler,"redrawn after Köhler (1929), via PerForm Fig. 2"
+kohler_sharp,classic,stimuli/shapes/classic/kohler_sharp.png,,,,sharp,kohler,"redrawn after Köhler (1929), via PerForm Fig. 2"
+chen_fig1_round,classic,stimuli/shapes/classic/chen_fig1_round.png,,,,round,chen_fig1,"Chen et al. (2016) Fig. 1, CC BY 4.0"
+chen_fig1_sharp,classic,stimuli/shapes/classic/chen_fig1_sharp.png,,,,sharp,chen_fig1,"Chen et al. (2016) Fig. 1, CC BY 4.0"
+maurer_style_0_sharp,classic,stimuli/shapes/classic/maurer_style_0_sharp.png,,,,sharp,maurer_style_0,"our own, in the style of Maurer et al. (2006)"
+maurer_style_0_round,classic,stimuli/shapes/classic/maurer_style_0_round.png,,,,round,maurer_style_0,"our own, in the style of Maurer et al. (2006)"
+maurer_style_1_sharp,classic,stimuli/shapes/classic/maurer_style_1_sharp.png,,,,sharp,maurer_style_1,"our own, in the style of Maurer et al. (2006)"
+maurer_style_1_round,classic,stimuli/shapes/classic/maurer_style_1_round.png,,,,round,maurer_style_1,"our own, in the style of Maurer et al. (2006)"
+maurer_style_2_sharp,classic,stimuli/shapes/classic/maurer_style_2_sharp.png,,,,sharp,maurer_style_2,"our own, in the style of Maurer et al. (2006)"
+maurer_style_2_round,classic,stimuli/shapes/classic/maurer_style_2_round.png,,,,round,maurer_style_2,"our own, in the style of Maurer et al. (2006)"
+maurer_style_3_sharp,classic,stimuli/shapes/classic/maurer_style_3_sharp.png,,,,sharp,maurer_style_3,"our own, in the style of Maurer et al. (2006)"
+maurer_style_3_round,classic,stimuli/shapes/classic/maurer_style_3_round.png,,,,round,maurer_style_3,"our own, in the style of Maurer et al. (2006)"
+thesis_q1_circle,thesis,stimuli/shapes/thesis/q1_circle.png,,,,q1,,redrawn from PerForm (2019) Fig. 26
+thesis_q5_rounded_star,thesis,stimuli/shapes/thesis/q5_rounded_star.png,,,,q5,,redrawn from PerForm (2019) Fig. 26
+thesis_q6_leaf,thesis,stimuli/shapes/thesis/q6_leaf.png,,,,q6,,redrawn from PerForm (2019) Fig. 26
+thesis_q3_s_curve,thesis,stimuli/shapes/thesis/q3_s_curve.png,,,,q3,,redrawn from PerForm (2019) Fig. 26
+thesis_q4_star,thesis,stimuli/shapes/thesis/q4_star.png,,,,q4,,redrawn from PerForm (2019) Fig. 26
+thesis_q2_tall_star,thesis,stimuli/shapes/thesis/q2_tall_star.png,,,,q2,,redrawn from PerForm (2019) Fig. 26

@@ -1,0 +1,13 @@
+model,shape_id,mean,count,human_mean,spearman_rho
+ollama:gemma3:27b,thesis_q1_circle,1.0,16,1.08,0.8827348295047495
+ollama:gemma3:27b,thesis_q2_tall_star,4.5,16,4.63,0.8827348295047495
+ollama:gemma3:27b,thesis_q3_s_curve,3.375,16,3.17,0.8827348295047495
+ollama:gemma3:27b,thesis_q4_star,4.5,16,4.13,0.8827348295047495
+ollama:gemma3:27b,thesis_q5_rounded_star,2.9375,16,1.67,0.8827348295047495
+ollama:gemma3:27b,thesis_q6_leaf,1.0,16,2.33,0.8827348295047495
+ollama:gemma3:4b,thesis_q1_circle,2.0,16,1.08,-0.05797710356524484
+ollama:gemma3:4b,thesis_q2_tall_star,2.0,16,4.63,-0.05797710356524484
+ollama:gemma3:4b,thesis_q3_s_curve,1.875,16,3.17,-0.05797710356524484
+ollama:gemma3:4b,thesis_q4_star,2.4375,16,4.13,-0.05797710356524484
+ollama:gemma3:4b,thesis_q5_rounded_star,2.5,16,1.67,-0.05797710356524484
+ollama:gemma3:4b,thesis_q6_leaf,1.6875,16,2.33,-0.05797710356524484

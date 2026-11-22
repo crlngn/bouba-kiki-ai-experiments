@@ -1,0 +1,5 @@
+model,task,mean,count
+ollama:gemma3:27b,classic,0.5,56
+ollama:gemma3:27b,match,0.4405381944444444,4608
+ollama:gemma3:4b,classic,0.42857142857142855,56
+ollama:gemma3:4b,match,0.6345486111111112,4608

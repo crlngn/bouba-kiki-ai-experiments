@@ -35,7 +35,7 @@ def parse(trial, text):
         m = re.match(r"^[\s\*\(\"'“]*([AB])\b", s, re.I) or re.search(r"\b(?:shape|answer)?\s*([AB])\b", s)
         return m.group(1).upper() if m else None
     if kind == "number":
-        m = re.search(r"\b([1-7])\b", s)
+        m = re.search(rf"\b([1-{trial.get('scale_max', 7)}])\b", s)
         return m.group(1) if m else None
     if kind == "word":
         low = s.lower()
@@ -57,7 +57,7 @@ def choice_of(trial, parsed):
         return None
     if trial["answer_type"] == "number":
         n = int(parsed)
-        return n if trial["order"] == 0 else 8 - n
+        return n if trial["order"] == 0 else trial.get("scale_max", 7) + 1 - n
     return trial["options"][parsed]
 
 
@@ -82,13 +82,16 @@ def main():
     """Build trials, sample the model, and append results to the log."""
     ap = argparse.ArgumentParser()
     ap.add_argument("--model", required=True, help="provider:model_id")
-    ap.add_argument("--tasks", default="match", help="comma list: match,rating,crossmodal,classic,graded,screen")
+    ap.add_argument("--tasks", default="match",
+                    help="comma list: match,rating,crossmodal,classic,graded,shape_rating,screen")
+    ap.add_argument("--shape-set", default="chen", choices=["chen", "mixed"], help="shapes for the graded task")
     ap.add_argument("--renderings", default=None,
                     help=f"comma list of {','.join(T.RENDERINGS)}; default: all for match, spelled for the rest")
     ap.add_argument("--shape-mode", default="text", choices=["text", "image"])
     ap.add_argument("--samples", type=int, default=10)
     ap.add_argument("--temperature", type=float, default=1.0)
     ap.add_argument("--max-tokens", type=int, default=32)
+    ap.add_argument("--cells", default="pure,mixed", help="word cells to include: pure, mixed or both")
     ap.add_argument("--limit", type=int, default=0, help="random subset of trials per task (0 = all)")
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--concurrency", type=int, default=4)
@@ -100,7 +103,9 @@ def main():
     for task in args.tasks.split(","):
         default = T.RENDERINGS if task == "match" else ["spelled"]
         renderings = args.renderings.split(",") if args.renderings else default
-        ts = T.build(task, renderings=renderings, shape_mode=args.shape_mode)
+        ts = T.build(task, renderings=renderings, shape_mode=args.shape_mode, shape_set=args.shape_set)
+        cells = set(args.cells.split(","))
+        ts = [t for t in ts if not t.get("cell") or t["cell"] in cells]
         if args.limit and len(ts) > args.limit:
             ts = random.Random(args.seed).sample(ts, args.limit)
         trials += ts

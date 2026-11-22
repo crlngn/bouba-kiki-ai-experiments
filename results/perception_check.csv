@@ -1,0 +1,5 @@
+model,shape_set,correct,total
+ollama:gemma3:4b,mixed,24,24
+ollama:gemma3:27b,mixed,24,24
+ollama:gemma3:4b,classic,48,48
+ollama:gemma3:27b,classic,48,48

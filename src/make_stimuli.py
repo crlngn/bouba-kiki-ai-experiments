@@ -5,9 +5,10 @@ CV syllables at random with a fixed seed. Each word gets five renderings that re
 cues to different degrees: spelled, IPA, sounds-like, articulatory description (no letters at all)
 and Japanese katakana. Famous words (bouba/kiki, takete/maluma) form a separate "memorized" set.
 
-Shapes are radial frequency patterns (Chen, Huang, Woods & Spence, 2016): r(t) = r0 * (1 + A * g(t)),
-where g is a sinusoid of frequency F whose peaks are sharpened by raising it to the power k
-(spikiness). Every outline is scaled to the same area.
+The "mixed" shapes drawn here are filled radial shapes, r(t) = r0 * (1 + A * g(t)), where g is a
+sinusoid of frequency F whose peaks are sharpened by raising it to the power k, so the spikes sit on
+a round body. All other shape sets (Chen et al. RF outlines, classic pairs, thesis shapes) come from
+make_shapes.py. Regenerating keeps the keep/screen_notes columns of words that already exist.
 
 Usage: uv run python src/make_stimuli.py [--seed 20261121] [--per-cell 50]
 """
@@ -21,6 +22,8 @@ from pathlib import Path
 
 import numpy as np
 from PIL import Image, ImageDraw
+
+from make_shapes import make_all
 
 ROOT = Path(__file__).resolve().parent.parent
 STIM = ROOT / "stimuli"
@@ -63,6 +66,7 @@ KATAKANA = {
 }
 
 BLOCKLIST = {
+    "bamu", "kuhtay", "kaykee", "goga", "teetay", "tuhkeetee", "mabuma",
     "lomo", "maluma", "takete", "bouba", "kiki", "lobo", "lobe", "mole", "mule", "memo", "nemo",
     "mono", "molo", "limo", "lime", "mile", "nile", "bile", "mine", "wine", "wise", "bike", "mike",
     "kobe", "kite", "tote", "poke", "pete", "sete", "sumo", "suki", "tiki", "piki", "pipe", "zine",
@@ -72,13 +76,20 @@ BLOCKLIST = {
     "kimono", "tokio", "tokyo", "kosovo", "bolivia", "molokai", "numenor", "namibia", "kisumu",
 }
 
+MAURER = "Maurer, Pathman & Mondloch (2006)"
 FAMOUS = [
-    {"word": "bouba", "class": "round", "source": "Ramachandran & Hubbard (2001)"},
-    {"word": "kiki", "class": "sharp", "source": "Ramachandran & Hubbard (2001)"},
-    {"word": "maluma", "class": "round", "source": "Köhler (1929/1947)"},
-    {"word": "takete", "class": "sharp", "source": "Köhler (1929/1947)"},
+    {"word": "bouba", "class": "round", "source": "Ramachandran & Hubbard (2001)", "ipa": "/ˈbu.ba/"},
+    {"word": "kiki", "class": "sharp", "source": "Ramachandran & Hubbard (2001)", "ipa": "/ˈki.ki/"},
+    {"word": "maluma", "class": "round", "source": "Köhler (1929/1947)", "ipa": "/maˈlu.ma/"},
+    {"word": "takete", "class": "sharp", "source": "Köhler (1929/1947)", "ipa": "/taˈke.te/"},
+    {"word": "bamu", "class": "round", "source": MAURER, "ipa": "/ˈba.mu/"},
+    {"word": "kuhtay", "class": "sharp", "source": MAURER, "ipa": "/ˈkʌ.teɪ/"},
+    {"word": "kaykee", "class": "sharp", "source": MAURER, "ipa": "/ˈkeɪ.ki/"},
+    {"word": "goga", "class": "round", "source": MAURER, "ipa": "/ˈgo.ga/"},
+    {"word": "teetay", "class": "sharp", "source": MAURER, "ipa": "/ˈti.teɪ/"},
+    {"word": "tuhkeetee", "class": "sharp", "source": MAURER, "ipa": "/tʌˈki.ti/"},
+    {"word": "mabuma", "class": "round", "source": MAURER, "ipa": "/maˈbu.ma/"},
 ]
-FAMOUS_IPA = {"bouba": "/ˈbu.ba/", "kiki": "/ˈki.ki/", "maluma": "/maˈlu.ma/", "takete": "/taˈke.te/"}
 
 FREQUENCIES = [3, 5, 7, 9, 11]
 AMPLITUDES = [0.05, 0.10, 0.15, 0.20, 0.25]
@@ -145,7 +156,7 @@ def make_pseudowords(rng, per_cell):
         rows.append({
             "word": f["word"], "set": "famous", "consonant_class": f["class"], "vowel_class": f["class"],
             "class": f["class"], "cell": "pure", "syllables": "", "spelled": f["word"],
-            "ipa": FAMOUS_IPA[f["word"]], "sounds_like": "", "articulatory": "", "katakana": "",
+            "ipa": f["ipa"], "sounds_like": "", "articulatory": "", "katakana": "",
             "keep": 1, "screen_notes": f["source"],
         })
     return rows
@@ -180,7 +191,7 @@ def shape_id(freq, amp, spike):
 
 
 def make_shapes():
-    """Draw the full frequency x amplitude x spikiness grid and mark the anchor pairs."""
+    """Draw the mixed frequency x amplitude x spikiness grid and mark its old anchor pairs."""
     out_dir = STIM / "shapes"
     out_dir.mkdir(parents=True, exist_ok=True)
     anchors = {}
@@ -194,15 +205,17 @@ def make_shapes():
                 sid = shape_id(f, a, k)
                 path = out_dir / f"{sid}.png"
                 draw_shape(f, a, k, path)
-                rows.append({"shape_id": sid, "file": str(path.relative_to(ROOT)), "frequency": f,
-                             "amplitude": a, "spikiness": k, "role": anchors.get(sid, "grid")})
+                rows.append({"shape_id": sid, "set": "mixed", "file": str(path.relative_to(ROOT)), "frequency": f,
+                             "amplitude": a, "spikiness": k, "role": anchors.get(sid, "grid"), "pair": "",
+                             "source": "our own radial shapes, spikes on a round body"})
     return rows
 
 
 def write_csv(path, rows):
-    """Write a list of dicts to CSV using the first row's keys."""
+    """Write a list of dicts to CSV using the union of their keys, in first-seen order."""
+    fields = list(dict.fromkeys(k for r in rows for k in r))
     with open(path, "w", newline="", encoding="utf-8") as fh:
-        w = csv.DictWriter(fh, fieldnames=list(rows[0].keys()))
+        w = csv.DictWriter(fh, fieldnames=fields, restval="")
         w.writeheader()
         w.writerows(rows)
 
@@ -216,8 +229,15 @@ def main():
     rng = random.Random(args.seed)
     STIM.mkdir(exist_ok=True)
     words = make_pseudowords(rng, args.per_cell)
-    write_csv(STIM / "pseudowords.csv", words)
-    shapes = make_shapes()
+    words_path = STIM / "pseudowords.csv"
+    if words_path.exists():
+        with open(words_path, encoding="utf-8") as fh:
+            previous = {r["word"]: r for r in csv.DictReader(fh)}
+        for w in words:
+            if w["word"] in previous and w["set"] == "fresh":
+                w["keep"], w["screen_notes"] = previous[w["word"]]["keep"], previous[w["word"]]["screen_notes"]
+    write_csv(words_path, words)
+    shapes = make_shapes() + make_all()
     write_csv(STIM / "shapes.csv", shapes)
     meta = {"seed": args.seed, "per_cell": args.per_cell, "consonants": CONSONANTS, "vowels": VOWELS,
             "frequencies": FREQUENCIES, "amplitudes": AMPLITUDES, "spikiness": SPIKINESS,

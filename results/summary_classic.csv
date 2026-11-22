@@ -1,0 +1,15 @@
+model,item,source,mean,count
+ollama:gemma3:27b,loud_bright,Marks (1974),1.0,8
+ollama:gemma3:27b,pitch_black,Mondloch (2004),1.0,8
+ollama:gemma3:27b,pitch_bright,Marks (1974),1.0,8
+ollama:gemma3:27b,pitch_dim,Marks (1974),1.0,8
+ollama:gemma3:27b,pitch_large,Mondloch (2004),1.0,8
+ollama:gemma3:27b,pitch_small,Mondloch (2004),1.0,8
+ollama:gemma3:27b,pitch_white,Mondloch (2004),1.0,8
+ollama:gemma3:4b,loud_bright,Marks (1974),0.5,8
+ollama:gemma3:4b,pitch_black,Mondloch (2004),1.0,8
+ollama:gemma3:4b,pitch_bright,Marks (1974),1.0,8
+ollama:gemma3:4b,pitch_dim,Marks (1974),1.0,8
+ollama:gemma3:4b,pitch_large,Mondloch (2004),1.0,8
+ollama:gemma3:4b,pitch_small,Mondloch (2004),0.0,8
+ollama:gemma3:4b,pitch_white,Mondloch (2004),1.0,8

@@ -1,0 +1,7 @@
+shape_id,question,n,rating_1_not_at_all,rating_2,rating_3_somewhat,rating_4,rating_5_very_much,mean,source
+thesis_q1_circle,q1,24,22,2,0,0,0,1.08,"PerForm (2019) Fig. 26, read from the scanned chart; counts are segment widths x 24"
+thesis_q5_rounded_star,q5,24,13,8,2,0,1,1.67,"PerForm (2019) Fig. 26, read from the scanned chart; counts are segment widths x 24"
+thesis_q6_leaf,q6,24,2,14,7,0,1,2.33,"PerForm (2019) Fig. 26, read from the scanned chart; counts are segment widths x 24"
+thesis_q3_s_curve,q3,24,1,6,9,4,4,3.17,"PerForm (2019) Fig. 26, read from the scanned chart; counts are segment widths x 24"
+thesis_q4_star,q4,24,0,0,3,15,6,4.13,"PerForm (2019) Fig. 26, read from the scanned chart; counts are segment widths x 24"
+thesis_q2_tall_star,q2,24,0,0,1,7,16,4.63,"PerForm (2019) Fig. 26, read from the scanned chart; counts are segment widths x 24"

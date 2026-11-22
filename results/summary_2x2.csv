@@ -1,0 +1,5 @@
+model,consonant_class,vowel_class,mean,count
+ollama:gemma3:27b,round,round,0.6959459459459459,296
+ollama:gemma3:27b,sharp,sharp,0.271875,320
+ollama:gemma3:4b,round,round,0.543918918918919,296
+ollama:gemma3:4b,sharp,sharp,0.45625,320

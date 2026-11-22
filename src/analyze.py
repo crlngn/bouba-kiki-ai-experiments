@@ -9,6 +9,7 @@ Outputs (results/):
   summary_rating.csv      mean sharpness rating (1 round .. 7 sharp) per word class
   summary_crossmodal.csv  % round-congruent choices per dimension
   summary_classic.csv     % congruent choices per classic correspondence
+  summary_shape_rating.csv  model vs. thesis participants' sharpness ratings of the six thesis shapes
   summary_graded.csv      logistic weights of P(sharp name) on frequency, amplitude, spikiness, per language
   position_bias.csv       share of answers picking the first option (0.5 = no bias)
   screening_flags.csv     words a model said it recognises
@@ -40,7 +41,8 @@ CONDITIONS = [
     ("Sounds-like", dict(word_set="fresh", rendering="sounds_like", shape_mode="text")),
     ("Articulatory", dict(word_set="fresh", rendering="articulatory", shape_mode="text")),
     ("Katakana", dict(word_set="fresh", rendering="katakana", shape_mode="text")),
-    ("Image", dict(word_set="fresh", rendering="spelled", shape_mode="image")),
+    ("Image", dict(word_set="fresh", rendering="spelled", shape_mode="image", shape_set="classic")),
+    ("Image, mixed shapes", dict(word_set="fresh", rendering="spelled", shape_mode="image", shape_set="mixed")),
 ]
 
 
@@ -55,6 +57,11 @@ def load(include_mock):
         raise SystemExit("No logs found in results/raw")
     df = pd.DataFrame(rows)
     df = df[df["error"].isna()]
+    if "shape_set" not in df:
+        df["shape_set"] = None
+    old_image = (df["task"] == "match") & (df["shape_mode"] == "image") & df["shape_set"].isna()
+    df.loc[old_image, "shape_set"] = "mixed"
+    df.loc[old_image, "trial_id"] = df.loc[old_image, "trial_id"].str.replace("match|image|", "match|image-mixed|", regex=False)
     return df.drop_duplicates(["model", "trial_id", "sample"], keep="last")
 
 
@@ -112,6 +119,8 @@ def summarise_rating(df):
 def summarise_crossmodal(df):
     """Congruent rate per model, dimension and rendering (pure words only)."""
     m = df[(df["task"] == "crossmodal") & (df["cell"] == "pure")].copy()
+    if m.empty:
+        return pd.DataFrame()
     out = []
     for (model, dim, rend), d in m.groupby(["model", "dimension", "rendering"]):
         r = item_rate(d.assign(c=d["choice"] == d["word_class"]), "c", True)
@@ -133,8 +142,12 @@ def summarise_graded(df):
     """Logistic regression of choosing the sharp name on standardised shape parameters."""
     import statsmodels.api as sm
     m = df[(df["task"] == "graded") & df["choice"].notna()]
+    if m.empty:
+        return pd.DataFrame()
     out = []
-    for (model, lang), d in m.groupby(["model", "lang"]):
+    if "shape_set" in m:
+        m = m.assign(shape_set=m["shape_set"].fillna("mixed"))
+    for (model, shape_set, lang), d in m.groupby(["model", "shape_set", "lang"]):
         y = (d["choice"] == "sharp").astype(int)
         if y.nunique() < 2:
             continue
@@ -143,9 +156,9 @@ def summarise_graded(df):
         try:
             fit = sm.Logit(y, X).fit(disp=0)
         except Exception as e:
-            out.append({"model": model, "lang": lang, "error": str(e)})
+            out.append({"model": model, "shape_set": shape_set, "lang": lang, "error": str(e)})
             continue
-        row = {"model": model, "lang": lang, "n": len(d), "p_sharp": y.mean()}
+        row = {"model": model, "shape_set": shape_set, "lang": lang, "n": len(d), "p_sharp": y.mean()}
         for k in ["const", "frequency", "amplitude", "spikiness"]:
             row[f"b_{k}"], row[f"se_{k}"] = fit.params[k], fit.bse[k]
         out.append(row)
@@ -164,6 +177,53 @@ def position_bias(df):
     return m.assign(first=first).groupby(["model", "task"])["first"].agg(["mean", "count"]).reset_index()
 
 
+def summarise_shape_rating(df):
+    """Model mean sharpness (1-5) per thesis shape next to the thesis participants' mean, with Spearman rho."""
+    from scipy.stats import spearmanr
+    m = df[(df["task"] == "shape_rating") & df["choice"].notna()]
+    if m.empty:
+        return pd.DataFrame()
+    human = pd.read_csv(ROOT / "stimuli" / "thesis_shape_ratings.csv")[["shape_id", "mean"]].rename(columns={"mean": "human_mean"})
+    t = m.assign(r=m["choice"].astype(float)).groupby(["model", "shape_id"])["r"].agg(["mean", "count"]).reset_index()
+    t = t.merge(human, on="shape_id")
+    rho = {model: spearmanr(g["mean"], g["human_mean"]).statistic for model, g in t.groupby("model")}
+    t["spearman_rho"] = t["model"].map(rho)
+    return t
+
+
+def plot_shape_rating(t, path):
+    """For each thesis shape (pictured, softest to sharpest by people), people's and each model's mean rating."""
+    if t.empty:
+        return
+    from matplotlib.offsetbox import AnnotationBbox, OffsetImage
+    from PIL import Image as PILImage
+    shapes = pd.read_csv(ROOT / "stimuli" / "shapes.csv").set_index("shape_id")["file"]
+    order = t.drop_duplicates("shape_id").sort_values("human_mean")
+    x = {sid: i for i, sid in enumerate(order["shape_id"])}
+    fig, ax = plt.subplots(figsize=(9, 5))
+    ax.plot(list(x.values()), order["human_mean"], c="k", lw=1.5, marker="s", ms=8, label="People (PerForm thesis, n = 24)", zorder=4)
+    for model, g in t.groupby("model"):
+        g = g.assign(x=g["shape_id"].map(x)).sort_values("x")
+        rho = g["spearman_rho"].iloc[0]
+        ax.plot(g["x"], g["mean"], marker="o", ms=7, lw=1, alpha=0.9,
+                label=f"{model.split(':', 1)[1]} (same order as people: rho = {rho:.2f})", zorder=3)
+    for sid, i in x.items():
+        img = PILImage.open(ROOT / shapes[sid]).convert("L").resize((90, 90))
+        ab = AnnotationBbox(OffsetImage(np.asarray(img), cmap="gray", zoom=0.55), (i, 0), xycoords=("data", "axes fraction"),
+                            box_alignment=(0.5, 1.15), frameon=False)
+        ax.add_artist(ab)
+    ax.set_xticks(list(x.values()), [""] * len(x))
+    ax.set_xlim(-0.5, len(x) - 0.5)
+    ax.set_ylim(0.7, 5.3)
+    ax.set_yticks([1, 2, 3, 4, 5], ["1 not at all", "2", "3 somewhat", "4", "5 very much"])
+    ax.set_ylabel("Mean rating")
+    ax.set_title("How sharp / hard does this shape feel?", pad=12)
+    ax.legend(fontsize=8, loc="upper left", frameon=False)
+    ax.spines[["top", "right"]].set_visible(False)
+    fig.subplots_adjust(bottom=0.2)
+    fig.savefig(path, dpi=200, bbox_inches="tight")
+
+
 def screening_flags(df):
     """Words any model claimed to recognise, with what it said."""
     m = df[(df["task"] == "screen") & (df["parsed"] == "KNOWN")]
@@ -178,7 +238,7 @@ def plot_main(summary, path):
     models = sorted(summary["model"].unique())
     x = np.arange(len(labels))
     width = 0.8 / len(models)
-    fig, ax = plt.subplots(figsize=(10, 5))
+    fig, ax = plt.subplots(figsize=(12, 5))
     for i, model in enumerate(models):
         s = summary[summary["model"] == model].set_index("condition").reindex(labels)
         pos = x - 0.4 + width * (i + 0.5)
@@ -186,11 +246,54 @@ def plot_main(summary, path):
         ax.bar(pos, s["rate"] * 100, width, label=model, yerr=err, capsize=3)
     ax.axhline(HUMAN_BASELINE * 100, ls="--", c="k", lw=1, label="Human baseline (bouba/kiki)")
     ax.axhline(50, ls=":", c="gray", lw=1, label="Chance")
-    ax.set_xticks(x, labels)
+    ax.set_xticks(x, [label.replace(" ", "\n") for label in labels])
     ax.set_ylim(0, 100)
     ax.set_ylabel("% round-sounding words matched to round shape\n(and sharp to sharp)")
     ax.set_title("Do models match sounds to shapes the way people do?")
     ax.legend(fontsize=8, loc="upper left", bbox_to_anchor=(1.01, 1), frameon=False)
+    ax.spines[["top", "right"]].set_visible(False)
+    fig.tight_layout()
+    fig.savefig(path, dpi=200)
+
+
+def summarise_quadrant(df):
+    """Per model: congruent rate with letters (spelled) vs without letter-shape cues (articulatory + katakana)."""
+    m = df[(df["task"] == "match") & (df["cell"] == "pure") & (df["word_set"] == "fresh")
+           & (df["shape_mode"] == "text")].copy()
+    m["c"] = m["choice"] == m["word_class"]
+    out = []
+    for model, d in m.groupby("model"):
+        x = item_rate(d[d["rendering"] == "spelled"], "c", True)
+        y = item_rate(d[d["rendering"].isin(["articulatory", "katakana"])], "c", True)
+        if x and y:
+            out.append({"model": model, **{f"x_{k}": v for k, v in x.items()}, **{f"y_{k}": v for k, v in y.items()}})
+    return pd.DataFrame(out)
+
+
+def plot_quadrant(q, path):
+    """Each model as a point: score with letters (x) against score without letter-shape cues (y)."""
+    if q.empty:
+        return
+    fig, ax = plt.subplots(figsize=(6.5, 6))
+    ax.axvline(50, c="gray", ls=":", lw=1)
+    ax.axhline(50, c="gray", ls=":", lw=1)
+    ax.plot([0, 100], [0, 100], c="lightgray", ls="--", lw=1)
+    ax.scatter([HUMAN_BASELINE * 100], [HUMAN_BASELINE * 100], marker="*", s=160, c="k", zorder=3)
+    ax.annotate("people (bouba/kiki)", (HUMAN_BASELINE * 100, HUMAN_BASELINE * 100), xytext=(-8, 8),
+                textcoords="offset points", ha="right", fontsize=8)
+    for _, r in q.iterrows():
+        xerr = [[(r.x_rate - r.x_ci_lo) * 100], [(r.x_ci_hi - r.x_rate) * 100]]
+        yerr = [[(r.y_rate - r.y_ci_lo) * 100], [(r.y_ci_hi - r.y_rate) * 100]]
+        ax.errorbar(r.x_rate * 100, r.y_rate * 100, xerr=xerr, yerr=yerr, fmt="o", capsize=3, label=r.model)
+    for x, y, t in [(97, 53, "matches people,\nnot only via letters"), (97, 3, "letter-shape\nshortcut"),
+                    (3, 3, "no effect"), (3, 97, "only without\nletters")]:
+        ax.text(x, y, t, ha="right" if x > 50 else "left", va="top" if y > 60 else "bottom", fontsize=8, c="gray")
+    ax.set_xlim(0, 100)
+    ax.set_ylim(0, 100)
+    ax.set_xlabel("% correct matches, spelled words")
+    ax.set_ylabel("% correct matches, no letter-shape cues\n(sound descriptions + katakana)")
+    ax.set_title("Is the effect carried by letters or by sound?")
+    ax.legend(fontsize=8, loc="center left", bbox_to_anchor=(0.02, 0.62), frameon=False)
     ax.spines[["top", "right"]].set_visible(False)
     fig.tight_layout()
     fig.savefig(path, dpi=200)
@@ -207,13 +310,17 @@ def main():
         "summary_match": summarise_match(df), "summary_2x2": summarise_2x2(df),
         "summary_rating": summarise_rating(df), "summary_crossmodal": summarise_crossmodal(df),
         "summary_classic": summarise_classic(df), "summary_graded": summarise_graded(df),
+        "summary_shape_rating": summarise_shape_rating(df),
         "position_bias": position_bias(df), "screening_flags": screening_flags(df),
     }
     for name, t in tables.items():
         if not t.empty:
             t.to_csv(RES / f"{name}.csv", index=False)
             print(f"\n== {name} ==\n{t.head(20).to_string(index=False)}")
+    tables["summary_quadrant"] = summarise_quadrant(df)
     plot_main(tables["summary_match"], RES / "figures" / "main.png")
+    plot_quadrant(tables["summary_quadrant"], RES / "figures" / "quadrant.png")
+    plot_shape_rating(tables["summary_shape_rating"], RES / "figures" / "shape_rating.png")
     print(f"\nChart: {RES / 'figures' / 'main.png'}")
 
 
