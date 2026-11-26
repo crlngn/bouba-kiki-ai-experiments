@@ -6,9 +6,14 @@ with the same command.
 
 Examples:
   uv run python src/run_behavioral.py --model mock:random --tasks match --limit 20
-  uv run python src/run_behavioral.py --model ollama:gemma3:27b --tasks match,rating,crossmodal,classic
+  uv run python src/run_behavioral.py --model ollama:gemma3:27b --tasks match,rating,concept,classic
   uv run python src/run_behavioral.py --model anthropic:claude-sonnet-5-5 --tasks match --shape-mode image
   uv run python src/run_behavioral.py --model gemini:<model id> --tasks screen --samples 1 --temperature 0
+
+Audio (recorded words; needs an audio model: gemini:... or hf:google/gemma-4-E4B-it):
+  uv run python src/run_behavioral.py --model hf:google/gemma-4-E4B-it --tasks transcribe --samples 4
+  uv run python src/run_behavioral.py --model hf:google/gemma-4-E4B-it --tasks rec_match,sos_word,sidhu \
+      --renderings ipa,audio,heard --transcripts results/raw/hf_google_gemma-4-E4B-it.jsonl
 """
 
 import argparse
@@ -21,7 +26,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import tasks as T
-from models import SYSTEM_PROMPT, load_model
+from models import AUDIO, SYSTEM_PROMPT, load_model
 
 ROOT = Path(__file__).resolve().parent.parent
 RAW = ROOT / "results" / "raw"
@@ -41,6 +46,9 @@ def parse(trial, text):
         low = s.lower()
         hits = [(low.find(w.lower()), w) for w in trial["options"] if w.lower() in low]
         return min(hits)[1] if hits else None
+    if kind == "spelling":
+        m = re.search(r"[A-Za-z][A-Za-z'-]*", s)
+        return m.group(0).lower().strip("'-") if m else None
     if kind == "screen":
         u = s.upper()
         if u.startswith("UNKNOWN") or "UNKNOWN" in u[:20]:
@@ -55,6 +63,8 @@ def choice_of(trial, parsed):
     """Turn a parsed option into 'round'/'sharp' (or the rating value, or congruent/incongruent)."""
     if parsed is None:
         return None
+    if trial["answer_type"] == "spelling":
+        return parsed
     if trial["answer_type"] == "number":
         n = int(parsed)
         return n if trial["order"] == 0 else trial.get("scale_max", 7) + 1 - n
@@ -83,10 +93,15 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--model", required=True, help="provider:model_id")
     ap.add_argument("--tasks", default="match",
-                    help="comma list: match,rating,crossmodal,classic,graded,shape_rating,screen")
+                    help="comma list: match,rating,concept,classic,graded,shape_rating,screen,sos_word,sos_shape,sidhu,"
+                         "sidhu_shape,rec_match,transcribe")
     ap.add_argument("--shape-set", default="chen", choices=["chen", "mixed"], help="shapes for the graded task")
     ap.add_argument("--renderings", default=None,
-                    help=f"comma list of {','.join(T.RENDERINGS)}; default: all for match, spelled for the rest")
+                    help=f"comma list of {','.join(T.RENDERINGS)} for the made-up words, or "
+                         f"{','.join(T.RECORDED_RENDERINGS)} for recorded words (sidhu, sos_word, rec_match); "
+                         "default: all for match, ipa,audio for rec_match, the task's original rendering otherwise")
+    ap.add_argument("--transcripts", type=Path,
+                    help="a log with transcribe results from the same model, for the 'heard' rendering")
     ap.add_argument("--shape-mode", default="text", choices=["text", "image"])
     ap.add_argument("--samples", type=int, default=10)
     ap.add_argument("--temperature", type=float, default=1.0)
@@ -99,11 +114,15 @@ def main():
     ap.add_argument("--dry-run", action="store_true", help="print trial counts and one prompt per task")
     args = ap.parse_args()
 
+    transcripts = T.load_transcripts(args.transcripts) if args.transcripts else None
+    if args.renderings and "heard" in args.renderings.split(",") and not transcripts:
+        raise SystemExit("The 'heard' rendering needs --transcripts with transcribe results")
     trials = []
     for task in args.tasks.split(","):
-        default = T.RENDERINGS if task == "match" else ["spelled"]
+        default = {"match": T.RENDERINGS, "rec_match": ["ipa", "audio"], "sos_word": ["ipa"]}.get(task, ["spelled"])
         renderings = args.renderings.split(",") if args.renderings else default
-        ts = T.build(task, renderings=renderings, shape_mode=args.shape_mode, shape_set=args.shape_set)
+        ts = T.build(task, renderings=renderings, shape_mode=args.shape_mode, shape_set=args.shape_set,
+                     transcripts=transcripts)
         cells = set(args.cells.split(","))
         ts = [t for t in ts if not t.get("cell") or t["cell"] in cells]
         if args.limit and len(ts) > args.limit:
@@ -111,10 +130,12 @@ def main():
         trials += ts
         print(f"{task}: {len(ts)} trials x {args.samples} samples")
         if args.dry_run and ts:
-            print("  e.g.", ts[0]["prompt"].replace("\n", " | "), ts[0]["images"])
+            print("  e.g.", ts[0]["prompt"].replace("\n", " | "), ts[0]["images"], ts[0].get("audio", []))
     if args.dry_run:
         return
 
+    if any(t.get("audio") for t in trials) and args.model.partition(":")[0] not in AUDIO:
+        raise SystemExit(f"{args.model} can't take audio; use one of {sorted(AUDIO)} or drop the audio trials")
     model = load_model(args.model)
     path = args.out or out_path(args.model, "-mock" if model.provider == "mock" else "")
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -130,7 +151,7 @@ def main():
                "temperature": args.temperature, "system_prompt": SYSTEM_PROMPT, **trial}
         try:
             raw = model.generate(trial["prompt"], trial["images"], args.temperature, args.max_tokens,
-                                 options=list(trial["options"]))
+                                 options=list(trial["options"]), audio=trial.get("audio", []))
             rec["raw"] = raw
             rec["parsed"] = parse(trial, raw)
             rec["choice"] = choice_of(trial, rec["parsed"])

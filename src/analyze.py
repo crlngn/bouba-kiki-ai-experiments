@@ -7,11 +7,19 @@ Outputs (results/):
   summary_match.csv       % round-congruent matches per model x condition, item-bootstrap 95% CI, binomial p
   summary_2x2.csv         P(round shape) per consonant class x vowel class (fresh words, spelled, text)
   summary_rating.csv      mean sharpness rating (1 round .. 7 sharp) per word class
-  summary_crossmodal.csv  % round-congruent choices per dimension
+  summary_concept.csv     sharp-side score per concept for round/sharp words and round/sharp shapes
+  summary_concept_route.csv  word-to-picture matches predicted from concept profiles vs. direct answers
   summary_classic.csv     % congruent choices per classic correspondence
   summary_shape_rating.csv  model vs. thesis participants' sharpness ratings of the six thesis shapes
   summary_graded.csv      logistic weights of P(sharp name) on frequency, amplitude, spikiness, per language
   position_bias.csv       share of answers picking the first option (0.5 = no bias)
+  summary_human_items.csv model vs. human item means for the SoS PASS pseudowords (per rendering) and shapes
+  summary_rec_match.csv   recorded words matched to shapes, per rendering (ipa, audio, heard): congruent rate,
+                          and for SoS PASS the correlation of P(sharp) with people's pointedness
+  summary_spelling_check.csv  per task, how closely answers to the audio follow answers to the model's own spelling
+  summary_sidhu.csv       model vs. human nonword means on each of Sidhu et al.'s 25 scales
+  summary_sidhu_route.csv concept route on the 25 scales: word-to-shape matches predicted from profile distance
+  summary_sidhu_shapes.csv  model Sharp-Round ratings of SoS PASS shapes vs. people's pointedness
   screening_flags.csv     words a model said it recognises
   figures/main.png        the main chart
 
@@ -116,17 +124,89 @@ def summarise_rating(df):
     return m.groupby(["model", "rendering", "consonant_class", "vowel_class"])["sharpness"].agg(["mean", "std", "count"]).reset_index()
 
 
-def summarise_crossmodal(df):
-    """Congruent rate per model, dimension and rendering (pure words only)."""
-    m = df[(df["task"] == "crossmodal") & (df["cell"] == "pure")].copy()
+CONCEPT_DIMS = ["emotion", "scent", "taste", "sound", "touch", "sharp_hard"]
+CONCEPT_LABELS = {"emotion": "calm → excited", "scent": "vanilla → lemon", "taste": "sweet → sour",
+                  "sound": "hum → harsh beep", "touch": "soft → hard", "sharp_hard": "sharp / hard\n(1-5)"}
+
+
+def concept_scores(df):
+    """One row per concept sample with 'sharp_score' in 0..1: 1 for the sharp-side choice, or (rating-1)/4."""
+    m = df[(df["task"] == "concept") & df["choice"].notna()].copy()
+    if m.empty:
+        return m
+    rating = m["dimension"] == "sharp_hard"
+    m["sharp_score"] = np.where(rating, (pd.to_numeric(m["choice"], errors="coerce") - 1) / 4,
+                                (m["choice"] == "sharp").astype(float))
+    m["item"] = np.where(m["stimulus"] == "word", m["word"], m["shape_id"])
+    return m
+
+
+def summarise_concept(df):
+    """Mean sharp-side score per model, stimulus type, class and concept (fresh/famous words and classic shapes)."""
+    m = concept_scores(df)
     if m.empty:
         return pd.DataFrame()
+    m = m[(m["stimulus"] == "image") & (m["shape_set"] == "classic") | (m["stimulus"] == "word") & (m["cell"] == "pure")]
+    g = m.groupby(["model", "stimulus", "word_class", "dimension", "item"])["sharp_score"].mean().reset_index()
+    return g.groupby(["model", "stimulus", "word_class", "dimension"])["sharp_score"].agg(["mean", "sem", "count"]).reset_index()
+
+
+def summarise_concept_route(df):
+    """Per model: how often picking the picture with the closer concept profile matches the human pattern, vs. asking directly."""
+    m = concept_scores(df)
+    if m.empty:
+        return pd.DataFrame()
+    prof = m.groupby(["model", "stimulus", "item", "dimension"])["sharp_score"].mean().unstack("dimension")
+    prof = prof.reindex(columns=CONCEPT_DIMS)
+    shapes = pd.read_csv(ROOT / "stimuli" / "shapes.csv")
+    pairs = {p: dict(zip(g["role"], g["shape_id"])) for p, g in shapes[shapes["set"] == "classic"].groupby("pair")}
+    direct = df[(df["task"] == "match") & (df["shape_set"] == "classic") & (df["word_set"] == "fresh")
+                & (df["cell"] == "pure") & df["choice"].notna()]
     out = []
-    for (model, dim, rend), d in m.groupby(["model", "dimension", "rendering"]):
-        r = item_rate(d.assign(c=d["choice"] == d["word_class"]), "c", True)
-        if r:
-            out.append({"model": model, "dimension": dim, "rendering": rend, **r})
+    for model, dm in direct.groupby("model"):
+        if (model, "word") not in prof.index.droplevel([2]).unique():
+            continue
+        hits = []
+        for (word, pair, cls), d in dm.groupby(["word", "shape_pair", "word_class"]):
+            try:
+                pw = prof.loc[(model, "word", word)].values
+                pr, ps = prof.loc[(model, "image", pairs[pair]["round"])].values, prof.loc[(model, "image", pairs[pair]["sharp"])].values
+            except KeyError:
+                continue
+            ok = ~(np.isnan(pw) | np.isnan(pr) | np.isnan(ps))
+            dr, ds = np.linalg.norm((pw - pr)[ok]), np.linalg.norm((pw - ps)[ok])
+            if dr == ds:
+                continue
+            predicted = "round" if dr < ds else "sharp"
+            hits.append({"concept_route": predicted == cls, "direct": (d["choice"] == cls).mean()})
+        if hits:
+            h = pd.DataFrame(hits)
+            out.append({"model": model, "words": len(h), "concept_route": h["concept_route"].mean(), "direct": h["direct"].mean()})
     return pd.DataFrame(out)
+
+
+def plot_concepts(summary, path):
+    """Per model and concept: how much further sharp items land on the sharp side than round items, for words and shapes."""
+    if summary.empty:
+        return
+    models = sorted(summary["model"].unique())
+    fig, axes = plt.subplots(1, len(models), figsize=(6 * len(models), 4.6), sharey=True, squeeze=False)
+    x = np.arange(len(CONCEPT_DIMS))
+    for ax, model in zip(axes[0], models):
+        sm = summary[summary["model"] == model].set_index(["stimulus", "word_class", "dimension"])["mean"]
+        for k, (stim, label, color) in enumerate([("word", "made-up words", "#6a51a3"), ("image", "shapes", "#9e9ac8")]):
+            gap = [sm.get((stim, "sharp", d), np.nan) - sm.get((stim, "round", d), np.nan) for d in CONCEPT_DIMS]
+            ax.bar(x + (k - 0.5) * 0.38, np.array(gap) * 100, 0.38, color=color, label=label)
+        ax.axhline(0, c="k", lw=0.8)
+        ax.set_xticks(x, [CONCEPT_LABELS[d].replace(" → ", "\n→ ") for d in CONCEPT_DIMS], fontsize=8)
+        ax.set_ylim(-20, 100)
+        ax.set_title(model.split(":", 1)[1])
+        ax.spines[["top", "right"]].set_visible(False)
+    axes[0][0].set_ylabel("Sharp items minus round items\n(percentage points toward the sharp side)")
+    axes[0][-1].legend(fontsize=8, loc="upper left", frameon=False)
+    fig.suptitle("Do sharp-sounding words and sharp shapes push the same concepts the same way?")
+    fig.tight_layout()
+    fig.savefig(path, dpi=200, bbox_inches="tight")
 
 
 def summarise_classic(df):
@@ -224,6 +304,249 @@ def plot_shape_rating(t, path):
     fig.savefig(path, dpi=200, bbox_inches="tight")
 
 
+def _external_ok():
+    """True when the external datasets are downloaded, so human-comparison tables can be built."""
+    return (ROOT / "data" / "external" / "sospass").exists() and (ROOT / "data" / "external" / "sidhu2022").exists()
+
+
+def summarise_rec_match(df):
+    """Per model, word set and rendering: congruent rate on scorable words, and r(P(sharp), human pointedness) for SoS PASS."""
+    m = df[(df["task"] == "rec_match") & df["choice"].notna()].copy()
+    if m.empty:
+        return pd.DataFrame()
+    m["c"] = m["choice"] == m["word_class"]
+    out = []
+    for (model, ws, rend), d in m.groupby(["model", "word_set", "rendering"]):
+        scored = d[d["cell"] != "mixed"]
+        r = item_rate(scored, "c", True) or {}
+        row = {"model": model, "word_set": ws, "rendering": rend, **r}
+        if ws == "sospass":
+            p = d.assign(s=d["choice"] == "sharp").groupby("item").agg(p_sharp=("s", "mean"), human=("human_mean", "first"))
+            row["r_with_human"] = p["p_sharp"].corr(p["human"]) if p["p_sharp"].nunique() > 1 else np.nan
+        out.append(row)
+    return pd.DataFrame(out)
+
+
+def summarise_spelling_check(df):
+    """Do answers to the recording follow answers to the model's own spelling of it? Item-level r, audio vs heard vs ipa."""
+    out = []
+    for task, keys in (("rec_match", ("word_set", "item")), ("sos_word", ("item",)), ("sidhu", ("scale", "item"))):
+        m = df[(df["task"] == task) & df["choice"].notna() & df["rendering"].isin(["audio", "heard", "ipa"])].copy()
+        if m.empty:
+            continue
+        m["v"] = (m["choice"] == "sharp").astype(float) if task == "rec_match" else pd.to_numeric(m["choice"], errors="coerce")
+        wide = m.pivot_table(index=["model", *keys], columns="rendering", values="v", aggfunc="mean").reset_index()
+        for model, w in wide.groupby("model"):
+            row = {"model": model, "task": task, "items": len(w)}
+            for a, b in (("audio", "heard"), ("audio", "ipa"), ("heard", "ipa")):
+                if a in w and b in w and w[[a, b]].dropna().shape[0] > 2:
+                    row[f"r_{a}_{b}"] = w[a].corr(w[b])
+            if len(row) > 3:
+                out.append(row)
+    t = df[(df["task"] == "transcribe") & df["choice"].notna() & (df["word_set"] == "sidhu")]
+    for model, d in t.groupby("model"):
+        out.append({"model": model, "task": "transcribe (Sidhu)", "items": d["item"].nunique(),
+                    "exact_spelling_rate": (d["choice"] == d["item"]).mean()})
+    return pd.DataFrame(out)
+
+
+def item_means(df, task, keys=("item",)):
+    """Model mean rating per model and item for a rating task."""
+    m = df[(df["task"] == task) & df["choice"].notna()]
+    if m.empty:
+        return pd.DataFrame()
+    return m.assign(r=pd.to_numeric(m["choice"], errors="coerce")).groupby(["model", *keys])["r"].mean().reset_index()
+
+
+def summarise_human_items(df):
+    """Correlation of model and human item means for the SoS PASS words and shapes, with the human split-half ceiling."""
+    if not _external_ok():
+        return pd.DataFrame()
+    import external as X
+    from scipy.stats import pearsonr, spearmanr
+    out = []
+    for task, loader, ceiling in (("sos_word", X.sos_words, X.sos_words_reliability), ("sos_shape", X.sos_shapes, None)):
+        sub = df[df["task"] == task].copy()
+        if sub.empty:
+            continue
+        sub["rendering"] = sub["rendering"].replace("", "image").fillna("image")
+        mm = item_means(sub, task, keys=("rendering", "item"))
+        human = loader()[["item", "human_mean"]]
+        ceil = ceiling() if ceiling else np.nan
+        for (model, rend), g in mm.merge(human, on="item").groupby(["model", "rendering"]):
+            r, p = pearsonr(g["r"], g["human_mean"])
+            out.append({"model": model, "task": task, "rendering": rend, "items": len(g), "pearson_r": r, "p": p,
+                        "spearman_rho": spearmanr(g["r"], g["human_mean"]).statistic, "human_split_half": ceil})
+    return pd.DataFrame(out)
+
+
+def summarise_sidhu(df):
+    """Per model and scale: correlation across the 40 nonwords between model and human means, with the human ceiling."""
+    if not _external_ok():
+        return pd.DataFrame()
+    import external as X
+    mm = item_means(df, "sidhu", keys=("rendering", "scale", "item"))
+    if mm.empty:
+        return pd.DataFrame()
+    _, human = X.sidhu_words()
+    rel = X.sidhu_reliability()
+    g = mm.merge(human, on=["item", "scale"])
+    out = []
+    for (model, rend, scale), d in g.groupby(["model", "rendering", "scale"]):
+        r = d["r"].corr(d["human_mean"]) if d["r"].nunique() > 1 else np.nan
+        out.append({"model": model, "rendering": rend, "scale": scale, "items": len(d), "pearson_r": r,
+                    "human_split_half": rel[scale], "model_mean": d["r"].mean(), "human_mean": d["human_mean"].mean()})
+    return pd.DataFrame(out)
+
+
+def _sidhu_profiles(df, task, keys):
+    """Model profiles on the 25 scales: one row per (model, *keys), one column per scale, centred within the stimulus type."""
+    mm = item_means(df, task, keys=(*keys, "scale"))
+    if mm.empty:
+        return pd.DataFrame()
+    prof = mm.pivot_table(index=["model", *keys], columns="scale", values="r")
+    return prof - prof.groupby(level="model").transform("mean")
+
+
+def _route_score(word_prof, word_class, shape_prof, pairs):
+    """Share of (word, round shape, sharp shape) triples where the shape with the nearer profile is the human-congruent one.
+
+    Returns per-word scores so the CI can be bootstrapped over words. Ties count as half."""
+    out = {}
+    for word, cls in word_class.items():
+        if word not in word_prof.index:
+            continue
+        w = word_prof.loc[word].values
+        hits = []
+        for rnd, shp in pairs:
+            dr = np.linalg.norm(w - shape_prof.loc[rnd].values)
+            ds = np.linalg.norm(w - shape_prof.loc[shp].values)
+            hits.append(0.5 if dr == ds else float((dr < ds) == (cls == "round")))
+        out[word] = np.mean(hits)
+    return pd.Series(out)
+
+
+def summarise_sidhu_route(df):
+    """Concept route on Sidhu et al.'s 25 human-rated scales.
+
+    Words are the 40 Sidhu nonwords; the outer thirds on people's Sharp-Round ratings are the sharp and round words.
+    Shapes are the classic pairs (round vs sharp member) and the SoS PASS shapes (outer thirds on people's
+    rounded/pointed means, every round x pointed pair). A word goes with the shape whose 25-scale profile is nearer,
+    each scale centred within words and within shapes. 'model words' uses the model's own word profiles;
+    'human words' uses people's word profiles with the model's shape profiles."""
+    if not _external_ok():
+        return pd.DataFrame()
+    import external as X
+    shapes = _sidhu_profiles(df, "sidhu_shape", ("shape_set", "item"))
+    if shapes.empty:
+        return pd.DataFrame()
+    words = _sidhu_profiles(df[df["rendering"] == "spelled"], "sidhu", ("item",))
+    _, human = X.sidhu_words()
+    hprof = human.pivot_table(index="item", columns="scale", values="human_mean")
+    hprof = hprof - hprof.mean()
+    sr = hprof["Sharp-Round"]
+    lo, hi = sr.quantile([1 / 3, 2 / 3])
+    word_class = {w: "sharp" for w in sr[sr <= lo].index} | {w: "round" for w in sr[sr >= hi].index}
+    sos = X.sos_shapes().set_index("item")["human_mean"]
+    slo, shi = sos.quantile([1 / 3, 2 / 3])
+    classic = pd.read_csv(ROOT / "stimuli" / "shapes.csv").query("set == 'classic'")
+    shape_pairs = {
+        "classic": [(("classic", g.set_index("role").loc["round", "shape_id"]), ("classic", g.set_index("role").loc["sharp", "shape_id"]))
+                    for _, g in classic.groupby("pair")],
+        "sospass": [(("sospass", r), ("sospass", s)) for r in sos[sos <= slo].index for s in sos[sos >= shi].index],
+    }
+    out = []
+    for model, sp in shapes.groupby(level="model"):
+        sp = sp.droplevel("model")
+        for label, wp in (("model words", words.xs(model, level="model") if model in words.index.get_level_values(0) else None),
+                          ("human words", hprof)):
+            if wp is None:
+                continue
+            cols = sp.columns.intersection(wp.columns)
+            for set_name, pairs in shape_pairs.items():
+                pairs = [p for p in pairs if p[0] in sp.index and p[1] in sp.index]
+                if not pairs:
+                    continue
+                s = _route_score(wp[cols], word_class, sp[cols], pairs)
+                boot = np.random.default_rng(0).choice(s.values, (2000, len(s))).mean(1)
+                out.append({"model": model, "word_profiles": label, "shapes": set_name, "words": len(s),
+                            "shape_pairs": len(pairs), "concept_route": s.mean(),
+                            "ci_lo": np.percentile(boot, 2.5), "ci_hi": np.percentile(boot, 97.5)})
+    return pd.DataFrame(out)
+
+
+def summarise_sidhu_shapes(df):
+    """Check that the model's shape ratings mean something: its Sharp-Round rating of SoS shapes vs people's pointedness."""
+    if not _external_ok():
+        return pd.DataFrame()
+    import external as X
+    from scipy.stats import spearmanr
+    mm = item_means(df[df["shape_set"] == "sospass"], "sidhu_shape", keys=("item", "scale"))
+    if mm.empty:
+        return pd.DataFrame()
+    g = mm[mm["scale"] == "Sharp-Round"].merge(X.sos_shapes()[["item", "human_mean"]], on="item")
+    return pd.DataFrame([{"model": m, "items": len(d), "spearman_rho_pointed": spearmanr(8 - d["r"], d["human_mean"]).statistic}
+                         for m, d in g.groupby("model")])
+
+
+def plot_human_items(df, path):
+    """Scatter of human vs model item means: SoS pseudowords and shapes, one row per model."""
+    if not _external_ok():
+        return
+    import external as X
+    df = df[(df["task"] != "sos_word") | (df["rendering"] == "ipa")]
+    panels = [("sos_word", X.sos_words, "Pseudowords (SoS PASS, IPA)"), ("sos_shape", X.sos_shapes, "Shapes (SoS PASS)")]
+    data = {t: item_means(df, t).merge(loader()[["item", "human_mean"]], on="item") for t, loader, _ in panels
+            if not item_means(df, t).empty}
+    if not data:
+        return
+    models = sorted(set().union(*[set(d["model"]) for d in data.values()]))
+    fig, axes = plt.subplots(len(models), len(panels), figsize=(5 * len(panels), 4.4 * len(models)), squeeze=False)
+    for i, model in enumerate(models):
+        for j, (task, _, title) in enumerate(panels):
+            ax = axes[i][j]
+            d = data.get(task, pd.DataFrame())
+            d = d[d["model"] == model] if not d.empty else d
+            if d.empty:
+                ax.set_visible(False)
+                continue
+            ax.scatter(d["human_mean"], d["r"], s=10 if task == "sos_word" else 22, alpha=0.5, color="#6a51a3")
+            ax.plot([1, 7], [1, 7], c="lightgray", ls="--", lw=1)
+            r = d["r"].corr(d["human_mean"])
+            ax.set_title(f"{title}\n{model.split(':', 1)[1]}: r = {r:.2f}", fontsize=10)
+            ax.set_xlim(1, 7)
+            ax.set_ylim(0.8, 7.2)
+            ax.set_xlabel("People: mean rating (1 rounded, 7 pointed)")
+            ax.set_ylabel("Model: mean rating")
+            ax.spines[["top", "right"]].set_visible(False)
+    fig.tight_layout()
+    fig.savefig(path, dpi=200, bbox_inches="tight")
+
+
+def plot_sidhu(t, path):
+    """Per scale, how well each model's nonword ratings track people's, against the human split-half ceiling."""
+    if t.empty:
+        return
+    t = t[t["rendering"] == "spelled"]
+    order = t.groupby("scale")["human_split_half"].first().sort_values().index
+    fig, ax = plt.subplots(figsize=(7.5, 8))
+    y = np.arange(len(order))
+    ax.scatter(t.groupby("scale")["human_split_half"].first().reindex(order), y, marker="|", s=200, c="k",
+               label="People vs people (split-half ceiling)", zorder=4)
+    for k, (model, g) in enumerate(t.groupby("model")):
+        g = g.set_index("scale").reindex(order)
+        ax.barh(y + (k - 0.5) * 0.38, g["pearson_r"], 0.38, label=model.split(":", 1)[1])
+    ax.axvline(0, c="k", lw=0.8)
+    ax.set_yticks(y, [s.replace("-", " – ") for s in order], fontsize=8)
+    ax.set_xlim(-0.6, 1)
+    ax.set_xlabel("Correlation with people across the 40 nonwords")
+    ax.set_title("Do models rate made-up words like people do?\n(Sidhu, Vigliocco & Pexman, 2022; 25 scales)")
+    ax.legend(fontsize=8, loc="upper center", bbox_to_anchor=(0.4, -0.07), ncol=3, frameon=False)
+    ax.spines[["top", "right"]].set_visible(False)
+    fig.tight_layout()
+    fig.savefig(path, dpi=200, bbox_inches="tight")
+
+
 def screening_flags(df):
     """Words any model claimed to recognise, with what it said."""
     m = df[(df["task"] == "screen") & (df["parsed"] == "KNOWN")]
@@ -308,9 +631,13 @@ def main():
     (RES / "figures").mkdir(parents=True, exist_ok=True)
     tables = {
         "summary_match": summarise_match(df), "summary_2x2": summarise_2x2(df),
-        "summary_rating": summarise_rating(df), "summary_crossmodal": summarise_crossmodal(df),
+        "summary_rating": summarise_rating(df), "summary_concept": summarise_concept(df),
+        "summary_concept_route": summarise_concept_route(df),
         "summary_classic": summarise_classic(df), "summary_graded": summarise_graded(df),
         "summary_shape_rating": summarise_shape_rating(df),
+        "summary_human_items": summarise_human_items(df), "summary_sidhu": summarise_sidhu(df),
+        "summary_rec_match": summarise_rec_match(df), "summary_spelling_check": summarise_spelling_check(df),
+        "summary_sidhu_route": summarise_sidhu_route(df), "summary_sidhu_shapes": summarise_sidhu_shapes(df),
         "position_bias": position_bias(df), "screening_flags": screening_flags(df),
     }
     for name, t in tables.items():
@@ -321,6 +648,9 @@ def main():
     plot_main(tables["summary_match"], RES / "figures" / "main.png")
     plot_quadrant(tables["summary_quadrant"], RES / "figures" / "quadrant.png")
     plot_shape_rating(tables["summary_shape_rating"], RES / "figures" / "shape_rating.png")
+    plot_concepts(tables["summary_concept"], RES / "figures" / "concepts.png")
+    plot_human_items(df, RES / "figures" / "human_items.png")
+    plot_sidhu(tables["summary_sidhu"], RES / "figures" / "sidhu_scales.png")
     print(f"\nChart: {RES / 'figures' / 'main.png'}")
 
 

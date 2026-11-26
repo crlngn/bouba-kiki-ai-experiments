@@ -23,7 +23,7 @@ Phase 1 (this repo, now) tests points 1–3 by asking models questions. Phase 2 
 
 ## Early results
 
-> **Preliminary.** Two open-weights models (Gemma 3 27B and 4B, run locally), 77 new made-up words plus 11 famous ones, 4 samples per question. Claude and Gemini haven't been run yet.
+> **Preliminary.** Two open-weights models (Gemma 3 27B and 4B, run locally), 77 new made-up words plus 11 famous ones, 4 samples per question, and item-by-item comparisons against two published human datasets (results 6 and 7). Claude and Gemini haven't been run yet.
 
 Each bar is the share of made-up words matched the way people match them (round-sounding words to the round shape, sharp-sounding to the spiky one). 50% is chance. The dashed line is the human score for bouba/kiki.
 
@@ -37,7 +37,7 @@ Each bar is the share of made-up words matched the way people match them (round-
 | New pseudowords | *mobolu*, *kitezi* | yes |
 | IPA | /mo.ˈbo.lu/ | yes (almost the same letters) |
 | Sounds-like | "moh-boh-loo" | yes |
-| Articulatory | "a voiced nasal made with both lips, followed by a mid back vowel; …" | **no** |
+| Articulatory | "3 syllables; syllable 1: a voiced nasal made with both lips followed by a mid back vowel; syllable 2: a voiced stop made with both lips followed by a mid back vowel; syllable 3: a voiced lateral made with the tongue tip followed by a high back vowel" (the word itself is never shown) | **no** |
 | Katakana | モボル | **no** (Japanese script) |
 | Image | the word, plus two pictures: classic round/spiky pairs (below) | yes, for the word; the shapes are pictures |
 | Image, mixed shapes | the same, with our first set of round shapes carrying thin spikes | yes, for the word |
@@ -64,9 +64,39 @@ So the 27B model sees sharpness, and rates it like a person. It just doesn't con
 
 **5. Famous words don't help.** If the models had memorized the textbook answers, *bouba*, *takete* and the Maurer et al. (2006) words should score higher than new words. They don't: 50% (27B) and 55% (4B) across 11 famous words. The 27B model gets *bouba* right every time, but not *kiki*, *maluma* or *takete*.
 
+**6. Linked through concepts? With our own concept list, a little.** People link sharp sounds and sharp shapes to the same other things: a harsh beep rather than a soft hum, lemon rather than vanilla, excited rather than calm. So we asked the models about each word and each classic shape: which emotion, scent, taste, sound and touch does it go with, and how sharp or hard does it feel? For shapes, 27B's answers split cleanly (spiky shapes go with the hard touch and the harsh beep almost every time). For words, the differences are small, but every concept leans the human way (for example, sharp-sounding words go with lemon 34 points more often than round-sounding words).
+
+<p align="center"><img src="results/figures/concepts.png" width="720" alt="Bars per concept: how much further sharp items land on the sharp side than round items, for words and for shapes"></p>
+
+If each word is matched to the picture with the closer concept profile, instead of asking the model directly, the score rises from 52% to 62% (27B) and from 51% to 65% (4B). That is only modestly above chance over 77 words, and the concept list is ours, so result 7 repeats the test with scales people have already rated.
+
+**7. Against published human data: shapes yes, words weakly.** Two open datasets let us compare models with people item by item, not just on round versus sharp:
+
+- **SoS PASS** (McCormick et al., 2015): 475 recorded made-up words (given to the models in IPA) and 90 shapes, rated from very rounded to very pointed (52 raters in all).
+- **Sidhu, Vigliocco & Pexman (2022)**: 40 recorded made-up words rated on 25 scales such as sharp–round, exciting–calming, masculine–feminine and happy–sad.
+
+<p align="center"><img src="results/figures/human_items.png" width="640" alt="Scatter plots of model vs human mean ratings for SoS PASS pseudowords and shapes"></p>
+
+Gemma 3 27B rates the 90 shapes almost exactly as people do (r = 0.95). For the 475 words it tracks people only loosely (r = 0.39, where two halves of the human raters agree at 0.85). On Sidhu et al.'s scales, its median correlation with people across the 40 words is 0.24, against a human ceiling of 0.75 ([chart](results/figures/sidhu_scales.png)). It does best on simple–complex (0.55) and passive–active (0.47), and worst on the scales closest to sound symbolism: sharp–round 0.10, hard–soft 0.17, harsh–mellow 0.07. The 4B model is near zero on the words throughout.
+
+We then asked the models to rate the shapes on the same 25 scales, giving every word and every shape a 25-number profile, and matched each clearly round or clearly sharp word (28 of the 40) to the shape with the nearer profile:
+
+| Word profiles from | Shapes | Gemma 3 27B | Gemma 3 4B |
+|---|---|---|---|
+| the model | 6 classic round/spiky pairs | 49% | 50% |
+| the model | SoS PASS shapes (961 round/pointed pairs) | 54% | 48% |
+| people (Sidhu et al.) | 6 classic round/spiky pairs | 74% | 81% |
+| people (Sidhu et al.) | SoS PASS shapes | 79% | 85% |
+
+With the models' own word profiles, the concept route is at chance, so the 62–65% from result 6 doesn't survive human-rated scales. With people's word profiles, the models' shape profiles find the matching shape most of the time, and still do (60–76%) after removing the five scales closest to sharpness (sharp–round, hard–soft, harsh–mellow, abrupt–continuous, delicate–rugged). Scales like exciting–calming and masculine–feminine carry part of the link, which fits the shared-concept idea on the human side.
+
+So in Gemma 3 the missing piece is on the word side. The models form a human-like concept profile for shapes but not for written made-up words. Audio models that hear the recordings people heard are the next test (see *Audio* below).
+
 ### Caveats
 
-- Two models from one family. The next runs add Claude, Gemini, the mixed consonant/vowel words, the 1–7 word rating task, the scent/taste/emotion task and the graded-shape task.
+- Two models from one family. The next runs add Claude, Gemini, audio models, the mixed consonant/vowel words, the 1–7 word rating task and the graded-shape task.
+- The 25-scale concept route uses 28 words, so its confidence intervals are about ±12 points. It also uses the SoS PASS shapes rather than the 20 shapes from Sidhu et al., which aren't public; with those, the model's matches could be checked against their participants' own word–shape match ratings.
+- The external datasets are downloaded by `src/fetch_external.py` into `data/external/` and are not redistributed here, since neither OSF project states a licence.
 - Four samples per question. Confidence intervals are bootstrapped over words, not samples, so they reflect the number of words (77), not the number of answers.
 - The image test used one prompt wording and one layout (two separate pictures). Both shapes in one image, or one picture and two names, might change the result. The graded-shape task does the latter and is next.
 - Both models lean toward one answer position: the 4B model picks "A" about 62% of the time, and the 27B model picks the second picture 87% of the time in the image task. Swapping the answer order on alternate trials cancels this in the scores, but a model stuck on one position can only score 50%.
@@ -98,14 +128,21 @@ So the 27B model sees sharpness, and rates it like a person. It just doesn't con
 | `match` | Which of two shapes is called *X*? (text descriptions or images) | run on Gemma 3 |
 | `classic` | Pitch and loudness with brightness and size | run on Gemma 3 |
 | `rating` | On a scale of 1–7, how round or sharp does *X* sound? | ready |
-| `crossmodal` | Is *X* calm or excited? Vanilla or lemon? Sweet or sour? A soft hum or a harsh beep? | ready |
+| `concept` | Does *X* (a word or a shape) go with calm or excited? Vanilla or lemon? Sweet or sour? A soft hum or a harsh beep? A soft or a hard touch? | run on Gemma 3 |
 | `shape_rating` | How sharp / hard does this shape feel? (1–5, the PerForm survey question, on the thesis shapes) | run on Gemma 3 |
 | `graded` | One shape from the Chen et al. grid (or the mixed set): is it called *[round word]* or *[sharp word]*? English and Mandarin | ready |
 | `screen` | Does *X* already mean something? | run on Gemma 3 27B |
+| `sos_word`, `sos_shape` | How rounded or pointed does this word sound / shape look? (1–7, SoS PASS items) | run on Gemma 3 |
+| `sidhu` | Rate the impression this word gives, on each of Sidhu et al.'s 25 scales (1–7) | run on Gemma 3 |
+| `sidhu_shape` | The same 25 scales for the SoS PASS and classic shapes | run on Gemma 3 |
+| `rec_match` | Which of two shapes is called *X*, for the recorded words (SoS PASS, Sidhu et al.), given as IPA, as the **recording itself**, or as the model's own spelling of the recording | ready |
+| `transcribe` | Spell the word in this recording. Feeds the spelling check below | ready |
+
+**Audio.** Models that take audio (Gemini, and Gemma 4 E2B/E4B/12B run locally with `hf:`) can hear the same recordings people heard in the SoS PASS and Sidhu et al. studies, so the word is never written down. `rec_match`, `sos_word` and `sidhu` accept the renderings `ipa`, `audio` and `heard`, and `sidhu` also accepts `spelled`. `sidhu` with `audio` asks how the heard word feels on Sidhu et al.'s 25 adjective scales, against their human ratings. An audio model might silently turn speech into letters, which would bring the spelling confound back. So `transcribe` asks for the model's spelling, and the `heard` rendering replays that spelling as text. If answers to the audio track answers to the model's own spelling more closely than answers to the IPA, the model is probably matching letters (`summary_spelling_check.csv`). Claude and Ollama don't take audio, and the runner refuses audio trials for them.
 
 Every question is asked in both answer orders, with a neutral instruction that never mentions bouba/kiki or sound symbolism. Every answer is logged with the model, prompt, raw output and time (`results/raw/`).
 
-**Models** (`src/models.py`): `anthropic:<model>`, `gemini:<model>`, `ollama:<model>` (local open-weights), and `mock:random` for testing.
+**Models** (`src/models.py`): `anthropic:<model>`, `gemini:<model>`, `ollama:<model>` (local open-weights), `hf:<Hugging Face id>` (local, through `transformers`, used for Gemma 4 audio), and `mock:random` for testing.
 
 ## Running it
 
@@ -119,6 +156,19 @@ uv run python src/run_behavioral.py --model ollama:gemma3:27b --tasks match,clas
 uv run python src/run_behavioral.py --model ollama:gemma3:27b --tasks match --shape-mode image --renderings spelled --cells pure --samples 4
 uv run python src/run_behavioral.py --model ollama:gemma3:27b --tasks shape_rating --samples 8
 uv run python src/check_perception.py --model ollama:gemma3:27b
+uv run python src/run_behavioral.py --model ollama:gemma3:27b --tasks concept --samples 4
+
+# Human-data comparisons (downloads the SoS PASS and Sidhu et al. data from OSF first)
+uv run python src/fetch_external.py
+uv run python src/run_behavioral.py --model ollama:gemma3:27b --tasks sos_word,sos_shape,sidhu --samples 2
+uv run python src/run_behavioral.py --model ollama:gemma3:27b --tasks sidhu_shape --samples 1
+
+# Audio (recorded words; needs ffmpeg, the external datasets and an audio model)
+uv run python src/fetch_external.py
+uv sync --extra hf   # for hf: models
+uv run python src/run_behavioral.py --model hf:google/gemma-4-E4B-it --tasks transcribe --samples 4
+uv run python src/run_behavioral.py --model hf:google/gemma-4-E4B-it --tasks rec_match,sos_word,sidhu \
+    --renderings ipa,audio,heard --transcripts results/raw/hf_google_gemma-4-E4B-it.jsonl --samples 4
 
 # Tables and charts
 uv run python src/analyze.py
@@ -136,4 +186,6 @@ Runs resume where they stopped. Use `--dry-run` to see trial counts and a sample
 - Chen, Huang, Woods & Spence (2016), When "Bouba" equals "Kiki", *Scientific Reports* 6, 26681.
 - Marks (1974), *American Journal of Psychology* 87(1/2); Mondloch (2004), *Cognitive, Affective, & Behavioral Neuroscience* 4(2).
 - Alper & Averbuch-Elor (2023), Kiki or Bouba? Sound Symbolism in Vision-and-Language Models, NeurIPS.
+- McCormick, Lacey, Sathian et al. (2015), SoS PASS: sound-symbolic pseudowords and shapes with ratings. https://osf.io/ekpgh/
+- Sidhu, Vigliocco & Pexman (2022), Higher order factors of sound symbolism, *Journal of Memory and Language* 125, 104323. https://osf.io/gruqs/
 - Rozendo Xavier dos Santos (2019), *PerForm*, MIT. https://hdl.handle.net/1721.1/124080
